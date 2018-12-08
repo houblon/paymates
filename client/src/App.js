@@ -7,11 +7,9 @@ import './App.css';
 import entries from './entries.json';
 
 import LandingPage from './components/pages/LandingPage/LandingPage.js';
-import Blog from './components/pages/Blog/Blog.js';
-import WriteArticle from './components/pages/WriteArticle/WriteArticle.js';
-
-
-
+import CreateHousehold from './components/pages/CreateHousehold/CreateHousehold.js';
+import LogTransaction from './components/pages/LogTransaction/LogTransaction.js';
+import FindHousehold from './components/pages/FindHousehold/FindHousehold.js';
 
 class App extends Component {
   componentDidMount () {
@@ -49,19 +47,19 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="App">
-        <nav className="App-navigation">
-          <h1 className="App-title">MERN Starter</h1>
-          <Link to="/">Welcome</Link>
-          <Link to="/blog/">Blog</Link>
-          <Link to="/write/">Write Article</Link>
+      <div className="Paymates-body">
+        <nav className="Paymates-navigation">
+          <h1 className="Paymates-title">paymates</h1>
+          <h2><Link to="/">Home</Link></h2>
+          <h2><Link to="/create-household/">Create Household</Link></h2>
         </nav>
 
-        <div className="App-mainContent">
+        <div className="Paymates-mainContent">
           <Switch>
             <Route exact path='/' component={LandingPage} />
-            <Route exact path='/blog/' component={Blog} />
-            <Route exact path='/write/' component={WriteArticle} />
+            <Route exact path='/create-household/' component={CreateHousehold} />
+            <Route exact path='/log-transaction/' component={LogTransaction} />
+            <Route exact path='/find-household/' component={FindHousehold} />
           </Switch>
         </div>
 
