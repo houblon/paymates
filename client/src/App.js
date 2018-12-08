@@ -49,8 +49,7 @@ class App extends Component {
     return (
       <div className="Paymates-body">
         <nav className="Paymates-navigation">
-          <h1 className="Paymates-title">paymates</h1>
-          <h2><Link to="/">Home</Link></h2>
+          <h1 className="Paymates-title"><Link to="/">paymates</Link></h1>
           <h2><Link to="/create-household/">Create Household</Link></h2>
         </nav>
 

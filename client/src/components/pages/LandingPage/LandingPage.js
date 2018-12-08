@@ -7,10 +7,9 @@ class LandingPage extends Component {
     return (
       <div className="LandingPage">
         <header className="LandingPage-header">
-            <h1>Paymates</h1>
-            <h2>Where friends stay friends... or not.</h2>
+            <h1>paymates is where friends stay friends... or not.</h1>
             <h2><Link to="/create-household/">Create a Household</Link></h2>
-            <h2><Link to="/find-household/">Find your Household</Link></h2>
+            <p><Link to="/find-household/">Find your Household</Link></p>
         </header>
       </div>
     );

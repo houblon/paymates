@@ -1,5 +1,4 @@
-.App {
-    background: linear-gradient(to top, #ff00cc, #333399);
+.Paymates-body {
     min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr minmax(auto, 800px) 1fr;
@@ -9,30 +8,16 @@
     align-items: stretch;
 }
 
-.App-navigation {
+.Paymates-navigation {
     padding: 10px;
-    color: white;
+    color: #282c34;
 }
 
-.App-sidebar {
-    background: rgba(255, 255, 255, 0.9);
-    display: relative;
-    padding: 10px;
-}
-
-.App-sidebar img {
-    max-width: 100%;
-}
-
-.App-navigation h1 {
+.Paymates-navigation h1 a {
     font-size: 36pt;
 }
 
-.Article-title {
-    font-size: 2em;
-}
-
-.App-navigation {
+.Paymates-navigation {
     grid-column: 2 / span 1;
     display: flex;
     justify-content: space-between;
@@ -40,16 +25,18 @@
     cursor: pointer;
 }
 
-.App-navigation a {
+.Paymates-navigation a {
     font-size: 14pt;
     text-decoration: none;
-    color: white;
+    color: #282c34;
     font-weight: bold;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5) inset;
 }
 
-.App-mainContent {
-    grid-column: 2;
+.Paymates-navigation a:hover {
+  color: #61dafb;
 }
 
-
+.Paymates-mainContent {
+    grid-column: 2;
+}

@@ -1,8 +1,8 @@
-.LandingPage {
+.FindHousehold {
   text-align: center;
 }
 
-.LandingPage-header {
+.FindHousehold-header {
   background-color: #282c34;
   min-height: 70vh;
   display: flex;
@@ -13,6 +13,6 @@
   color: white;
 }
 
-.LandingPage a {
+.FindHousehold a {
   color: #61dafb;
 }
