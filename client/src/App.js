@@ -13,35 +13,79 @@ import FindHousehold from './components/pages/FindHousehold/FindHousehold.js';
 
 class App extends Component {
 
+  state = {
+    members: ['Jesse', 'Steve', 'Maria']
+  }
+
   getSum = (total, num) => {
     return total + num;
   }
 
+  roundToTwoDecimalPlaces = (num) => {
+    return Math.round(num * 100) / 100;
+  }
+
+  getAmounts = (object) => {
+    let arr = [];
+    for (const x of Object.values(object)) {
+      arr.push(x.amount);
+    }
+    return arr;
+  }
+
   sumAllBillsPaidByMember = (member) => {
     const allBillsPaidByMember = entries.filter(p => p.payer === member && p.action === 'paid bill');
-    let myArr = [];
-    for (const transaction of Object.values(allBillsPaidByMember)) {
-      myArr.push(transaction.amount);
-    }
-    let sum = myArr.reduce(this.getSum)
-    console.log("Total bills paid by " + member + ": " + sum);
+    const sum = this.roundToTwoDecimalPlaces(this.getAmounts(allBillsPaidByMember, 'amount').reduce(this.getSum));
     return sum;
   }
 
-  componentDidMount () {
-    // Uses filter to narrow down object into
-    const jessePaymentsRecieved = entries.filter(p => p.payee === 'Jesse');
-    this.sumAllBillsPaidByMember("Jesse");
-    const jessePaymentsMade = entries.filter(p => p.payer === 'Jesse' && p.action === 'paid back');
-
-    const mariaPaymentsRecieved = entries.filter(p => p.payee === 'Maria');
-    this.sumAllBillsPaidByMember("Maria");
-    const mariaPaymentsMade = entries.filter(p => p.payer === 'Maria' && p.action === 'paid back');
-
-    const stevePaymentsRecieved = entries.filter(p => p.payee === 'Steve');
-    this.sumAllBillsPaidByMember("Steve");
-    const stevePaymentsMade = entries.filter(p => p.payer === 'Steve' && p.action === 'paid back');
+  sumReimbursementsReceived = (member) => {
+    const allReceivedByMember = entries.filter(p => p.payee === member);
+    const sum = this.roundToTwoDecimalPlaces(this.getAmounts(allReceivedByMember, 'amount').reduce(this.getSum));
+    return sum;
   }
+
+  sumReimbursementsSent = (member) => {
+    const allReimbursementsSent = entries.filter(p => p.payer === member && p.action === 'paid back');
+    const sum = this.roundToTwoDecimalPlaces(this.getAmounts(allReimbursementsSent, 'amount').reduce(this.getSum));
+    return sum;
+  }
+
+  sumOwed = (member) => {
+    const splitBills = entries.filter(p => p.proportions);
+    let memberPortion = [];
+    for (const bill of splitBills) {
+      const amount = bill.amount;
+      for (const [key, value] of Object.entries(bill.proportions)) {
+        if (key === member) {
+          memberPortion.push(value * amount);
+        }
+      }
+    }
+    
+    const sum = this.roundToTwoDecimalPlaces(memberPortion.reduce(this.getSum));
+    return sum;
+  }
+
+  calculateBalance = (member) => {
+    const b = this.sumAllBillsPaidByMember(member) - 
+              this.sumOwed(member) + 
+              this.sumReimbursementsSent(member) -
+              this.sumReimbursementsReceived(member);
+    const rounded = this.roundToTwoDecimalPlaces(b);
+    return rounded;
+  }
+
+  componentDidMount () {
+    for (const member of this.state.members) {
+      console.log(member, 'balance', this.calculateBalance(member));
+      console.log('Total bills paid by', member, ':', this.sumAllBillsPaidByMember(member));
+      console.log(member, 'owes', this.sumOwed(member));
+      console.log('Total reimbursements sent by', member, ':', this.sumReimbursementsSent(member));
+      console.log('Total reimbursements received by', member, ':', this.sumReimbursementsReceived(member));
+    }
+  }
+
   render() {
     return (
       <div className="Paymates-body">
