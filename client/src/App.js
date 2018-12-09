@@ -35,19 +35,19 @@ class App extends Component {
 
   sumAllBillsPaidByMember = (member) => {
     const allBillsPaidByMember = entries.filter(p => p.payer === member && p.action === 'paid bill');
-    const sum = this.roundToTwoDecimalPlaces(this.getAmounts(allBillsPaidByMember, 'amount').reduce(this.getSum));
+    const sum = this.roundToTwoDecimalPlaces(this.getAmounts(allBillsPaidByMember).reduce(this.getSum));
     return sum;
   }
 
   sumReimbursementsReceived = (member) => {
     const allReceivedByMember = entries.filter(p => p.payee === member);
-    const sum = this.roundToTwoDecimalPlaces(this.getAmounts(allReceivedByMember, 'amount').reduce(this.getSum));
+    const sum = this.roundToTwoDecimalPlaces(this.getAmounts(allReceivedByMember).reduce(this.getSum));
     return sum;
   }
 
   sumReimbursementsSent = (member) => {
     const allReimbursementsSent = entries.filter(p => p.payer === member && p.action === 'paid back');
-    const sum = this.roundToTwoDecimalPlaces(this.getAmounts(allReimbursementsSent, 'amount').reduce(this.getSum));
+    const sum = this.roundToTwoDecimalPlaces(this.getAmounts(allReimbursementsSent).reduce(this.getSum));
     return sum;
   }
 
