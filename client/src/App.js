@@ -68,7 +68,7 @@ class App extends Component {
   }
 
   componentDidMount () {
-    fetch('./needs-equalization.json')
+    fetch('/needs-equalization.json')
       .then(response => response.json())
       .then(responseJson => {
         this.setState({
