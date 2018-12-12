@@ -74,4 +74,9 @@ getAmounts = (object) => {
 
   ////
 
-  
+  getSum = (total, num) => {
+    return total + num;
+  }
+
+
+  ////
