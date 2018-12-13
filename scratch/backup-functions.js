@@ -80,3 +80,33 @@ getAmounts = (object) => {
 
 
   ////
+
+
+  equalize = (obj) => {
+    console.log(obj);
+    const hypothetical = {}
+    // for (const member of this.state.members) {
+    //   console.log(obj[member]);
+    // }
+    console.log(Object.keys(obj).length);
+    console.log(Object.values(obj).length);
+    for (const [key, value] of Object.entries(obj)) {
+      if (value === 0) {
+        console.log(key + " is already settled.")
+      } else {
+        console.log(key + " needs to be settled.")
+        const subject = key
+        const subjectValue = value
+        for (const [key, value] of Object.entries(obj)) {
+          if (key !== subject) {
+            console.log(subject + " is not the same person as " + key);
+            console.log(subject);
+          } else {
+              console.log(subject + " is the same person as " + key);
+          }
+        }
+      }
+    }
+  }
+
+  /////
