@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './Input.css';
 
 const Input = (props) => (
-  <input class="Input"
+  <input className="Input"
+    type={props.type}
     name={props.name}
     placeholder={props.placeholder}
     value={props.value}
