@@ -28,10 +28,10 @@ class CreateHousehold extends Component {
     });
   }
 
-  onMemberNameChange = (idx) => (evt) => {
+  onMemberNameChange = (idx) => (ev) => {
     const newhouseholdMembers = this.state.householdMembers.map((member, sidx) => {
       if (idx !== sidx) return member;
-      return { ...member, name: evt.target.value };
+      return { ...member, name: ev.target.value };
     });
     
     this.setState({ householdMembers: newhouseholdMembers });
@@ -119,6 +119,7 @@ class CreateHousehold extends Component {
           /> */}
         {/* <br /> */}
         {/* <Input
+            type="text"
             name="Currency"
             placeholder="What currency"
             value={this.state.defaultCurrency}
@@ -129,6 +130,7 @@ class CreateHousehold extends Component {
           <div className="member" key={String(idx)}>
             <Input
               type="text"
+              name={'member_' + String(idx + 1)}
               placeholder={`Member #${idx + 1} name`}
               value={member.name}
               onChange={this.onMemberNameChange(idx)}
