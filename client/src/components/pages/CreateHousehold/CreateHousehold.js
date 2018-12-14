@@ -127,7 +127,7 @@ class CreateHousehold extends Component {
 
         {this.state.householdMembers.map((member, idx) => (
           <div className="member" key={String(idx)}>
-            <input
+            <Input
               type="text"
               placeholder={`Member #${idx + 1} name`}
               value={member.name}
