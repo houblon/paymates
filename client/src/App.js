@@ -163,6 +163,7 @@ class App extends Component {
             <Route exact path='/create-household/' component={CreateHousehold} />
             <Route exact path='/log-transaction/' component={LogTransaction} />
             <Route exact path='/find-household/' component={FindHousehold} />
+            <Route exact path='/household/:id' component={CreateHousehold} />
           </Switch>
         </div>
 
