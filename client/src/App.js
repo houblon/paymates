@@ -78,7 +78,7 @@ class App extends Component {
       }
       count++
     }
-    console.log(loopCount);
+    // console.log(loopCount);
     return loopCount
   }
   removeZeroBalances = (arr) => {
@@ -96,10 +96,10 @@ class App extends Component {
     let recomendations = []
     this.sortBalances(arr)
     let loopCount = this.countNeededLoops(arr)
-    console.log(loopCount);
+    // console.log(loopCount);
     let count = 0
     arr = this.removeZeroBalances(arr)
-    console.log(arr);
+    // console.log(arr);
     while (count < loopCount) {
       if (Math.abs(arr[0].balance) < arr[arr.length-1].balance) {
         //console.log(Math.abs(arr[0].balance) + " is less than " + arr[arr.length-1].balance + "... So " + arr[0].name + " should pay " + arr[arr.length-1].name + " $" + Math.abs(arr[0].balance) + ".");
@@ -111,11 +111,11 @@ class App extends Component {
       }
       count++
     }
-    console.log(recomendations);
-    console.log(arr);
+    // console.log(recomendations);
+    // console.log(arr);
     if (arr.length < 3) {
-      console.log('There are 0, 1, or 2 members that have balances other than absolute zero.')
-      console.log('Members with balances other than absolute zero after equalization: ' + arr.length);
+      // console.log('There are 0, 1, or 2 members that have balances other than absolute zero.')
+      // console.log('Members with balances other than absolute zero after equalization: ' + arr.length);
       this.setState({
         recomendations: recomendations,
         overUnder: arr

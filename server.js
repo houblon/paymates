@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectID;
 const app = express();
 app.use(express.json());
 
@@ -41,23 +42,62 @@ app.get('/api/some/example/with/mongodb/', (request, response) => {
 });
 
 
+//
+// Testing custom household route (with use of MongoDB)
+// app.get('/api/mongodb/households/:objectId/', (request, response) => {
+app.get('/api/mongodb/:collectionName/:objectId/', (request, response) => {
+  const collectionName = request.params.collectionName;
+  const objectId = request.params.objectId;
+  console.log('Object ID:', objectId);
+  console.log('Custom collectionName + object ID route with MongoDB is being used...');
+
+  db.collection(collectionName)
+    .find({"_id": ObjectId(objectId)})
+    .toArray((err, results) => {
+      // Got data back.. send to client
+      if (err) throw err;
+      // response.json(results);
+      const hJson = response.json(results);
+      // console.log(hJson);
+      return hJson;
+    });
+});
+
 
 //
-// Totally insecure backend routes, good for rapid prototyping
-// DELETE before use in a real application
-app.get('/api/mongodb/:collectionName/', (request, response) => {
-  const collectionName = request.params.collectionName;
+// Testing custom household route (with use of MongoDB)
+// app.get('/api/mongodb/households/:objectId/', (request, response) => {
+app.get('/household/:objectId/', (request, response) => {
+  const objectId = request.params.objectId;
+  console.log('Object ID:', objectId);
+  console.log('Custom /household/:objectId/ route with MongoDB is being used...');
 
-  // Get GET params
-  const query = request.query || {};
-  db.collection(collectionName)
-    .find(query)
+  db.collection('households')
+    .find({"_id": ObjectId(objectId)})
     .toArray((err, results) => {
       // Got data back.. send to client
       if (err) throw err;
       response.json(results);
     });
 });
+
+
+//
+// Totally insecure backend routes, good for rapid prototyping
+// DELETE before use in a real application
+// app.get('/api/mongodb/:collectionName/', (request, response) => {
+//   const collectionName = request.params.collectionName;
+
+//   // Get GET params
+//   const query = request.query || {};
+//   db.collection(collectionName)
+//     .find(query)
+//     .toArray((err, results) => {
+//       // Got data back.. send to client
+//       if (err) throw err;
+//       response.json(results);
+//     });
+// });
 
 app.post('/api/mongodb/:collectionName/', (request, response) => {
   const collectionName = request.params.collectionName;
