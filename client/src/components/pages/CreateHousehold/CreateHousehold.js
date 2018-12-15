@@ -9,7 +9,7 @@ class CreateHousehold extends Component {
     householdName: '',
     householdMembers: [
       {
-        id: 1,
+        position: 1,
         name: '',
       }
     ],
@@ -28,9 +28,9 @@ class CreateHousehold extends Component {
     });
   }
 
-  onMemberNameChange = (idx) => (ev) => {
-    const newhouseholdMembers = this.state.householdMembers.map((member, sidx) => {
-      if (idx !== sidx) return member;
+  onMemberNameChange = (index) => (ev) => {
+    const newhouseholdMembers = this.state.householdMembers.map((member, state_index) => {
+      if (index !== state_index) return member;
       return { ...member, name: ev.target.value };
     });
     
@@ -39,9 +39,9 @@ class CreateHousehold extends Component {
 
   onAddMember = () => {
     const newIndex = this.state.householdMembers.length + 1;
-    this.setState({ householdMembers: this.state.householdMembers.concat([{ id: newIndex, name: '' }]) });
+    this.setState({ householdMembers: this.state.householdMembers.concat([{ position: newIndex, name: '' }]) });
 
-    const lastItem = this.state.householdMembers.length-1;
+    const lastItem = this.state.householdMembers.length - 1;
     const name = this.state.householdMembers[lastItem].name;
     console.log(name);
     const formData = {
@@ -126,19 +126,19 @@ class CreateHousehold extends Component {
             onChange={this.onChangeDefaultCurrency}
           /> */}
 
-        {this.state.householdMembers.map((member, idx) => (
-          <div className="member" key={String(idx)}>
+        {this.state.householdMembers.map((member, index) => (
+          <div className="member" key={String(index)}>
             <Input
               type="text"
-              name={'member_' + String(idx + 1)}
-              placeholder={`Member #${idx + 1} name`}
+              name={'member_' + String(index + 1)}
+              placeholder={`Member #${index + 1} name`}
               value={member.name}
-              onChange={this.onMemberNameChange(idx)}
+              onChange={this.onMemberNameChange(index)}
             />
-            {/* <button type="button" onClick={this.onRemoveMember(idx)} className="small">-</button> */}
+            {/* <button type="button" onClick={this.onRemoveMember(index)} className="small">-</button> */}
           </div>
         ))}
-        <button type="button" onClick={this.onAddMember} className="small">Add Member</button>
+        <button type="button" onClick={this.onAddMember} className="small">Add Another Member</button>
 
 
           <br />

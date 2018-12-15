@@ -17,42 +17,42 @@ class App extends Component {
   }
   sumAllBillsPaidByMember = (member) => {
     let total = 0
-    for (const [key, value] of Object.entries(this.state.entries)) {
-      if (value.payer === member && value.action === 'paid bill') {
-        total = total+value.amount
+    for (const entry of this.state.entries) {
+      if (entry.payer === member && entry.action === 'paid bill') {
+        total += entry.amount
       }
     }
-    //console.log("Bills Paid by " + member + ": " + total);
+    // console.log("Bills Paid by " + member + ": " + total);
     return total
   }
   sumReimbursementsReceived = (member) => {
     let total = 0
-    for (const [key, value] of Object.entries(this.state.entries)) {
-      if (value.payee === member) {
-        total += value.amount
+    for (const entry of this.state.entries) {
+      if (entry.payee === member) {
+        total += entry.amount
       }
     }
-    //console.log("Reimbursements Received " + member + ": "  + total);
+    // console.log("Reimbursements Received " + member + ": "  + total);
     return total
   }
   sumReimbursementsSent = (member) => {
     let total = 0
-    for (const [key, value] of Object.entries(this.state.entries)) {
-      if (value.payer === member && value.action === "paid back") {
-        total = total+value.amount
+    for (const entry of this.state.entries) {
+      if (entry.payer === member && entry.action === "paid back") {
+        total += entry.amount
       }
     }
-    //console.log("Reimbursements Sent " + member + ": "  + total);
+    // console.log("Reimbursements Sent " + member + ": "  + total);
     return total
   }
   sumProportionsOwed = (member) => {
     let total = 0
-    for (const [key, value] of Object.entries(this.state.entries)) {
-      if (value.action === 'paid bill' && value.proportions.hasOwnProperty(member)) {
-        total = total + (value.amount * value.proportions[member])
+    for (const entry of this.state.entries) {
+      if (entry.action === 'paid bill' && entry.proportions.hasOwnProperty(member)) {
+        total += (entry.amount * entry.proportions[member])
       }
     }
-    //console.log("Sum of proportions of bills owed by " + member + ": "  + total);
+    // console.log("Sum of proportions of bills owed by " + member + ": "  + total);
     return total
   }
   calculateBalance = (member) => {
@@ -61,7 +61,7 @@ class App extends Component {
               this.sumReimbursementsSent(member) -
               this.sumReimbursementsReceived(member);
     const rounded = this.roundToTwoDecimalPlaces(b);
-    //console.log('Balance for ' + member + ": $" + rounded);
+    // console.log('Balance for ' + member + ": $" + rounded);
     return rounded;
   }
   sortBalances = (arr) => {
@@ -126,15 +126,15 @@ class App extends Component {
   }
 
   componentDidMount () {
-    fetch('./needs-equalization.json')
-    //fetch('./entries.json')
+    fetch('/needs-equalization.json')
+    // fetch('/entries.json')
       .then(response => response.json())
       .then(responseJson => {
         this.setState({
           entries: responseJson
         })
       })
-      .then(responseJson => {
+      .then(() => {
         const arr = []
         for (const member of this.state.members) {
           arr.push({
