@@ -10,36 +10,43 @@ class LogTransaction extends Component {
     amount: 0,
     proportions: '',
   }
+
   onChangeTransactionDate = (ev) => {
     this.setState({
       TransactionDate: ev.target.value,
     });
   }
+
   onChangePayer = (ev) => {
     this.setState({
       payer: ev.target.value,
     });
   }
+
   onChangeAction = (ev) => {
     this.setState({
       action: ev.target.value,
     });
   }
+
   onChangeRecipient = (ev) => {
     this.setState({
       recipient: ev.target.value,
     });
   }
+
   onChangeAmount = (ev) => {
     this.setState({
       amount: ev.target.value,
     });
   }
+  
   onChangeProportions = (ev) => {
     this.setState({
       proportions: ev.target.value,
     });
   }
+
   submit = () => {
     const formData = {
       transactionDate: this.state.transactionDate,
@@ -50,8 +57,11 @@ class LogTransaction extends Component {
       proportions: this.state.proportions,
     };
 
-    fetch('/api/mongodb/blogposts/', {
-        method: 'POST',
+    //
+    // THIS IS WHERE THE UPDATE FUNCTION NEEDS TO GO!!!
+    //
+    fetch('/api/mongodb/households/5c15c80c2fb417300a289157', { // this route need to change
+        method: 'PUT',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(formData),
       })
@@ -59,10 +69,50 @@ class LogTransaction extends Component {
       .then(data => {
         console.log('Got this back', data);
 
-        // Redirect to blog
-        this.props.history.push('/blog/');
+        // Redirect to homepage
+        // this.props.history.push('/');
       });
   }
+
+  componentDidMount () {
+    // const currentURL = window.location.href
+    // let result = currentURL.substring(currentURL.lastIndexOf("/") + 1);
+    // console.log(result);
+    const id = this.props.match.params.id;
+    console.log(id);
+    fetch(`/api/mongodb/households/${id}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        this.setState({
+          household: data
+        })
+      })
+      .then(() =>{
+        const formData = {
+          transactionDate: this.state.transactionDate,
+          payer: this.state.payer,
+          action: this.state.action,
+          recipient: this.state.recipient,
+          amount: this.state.amount,
+          proportions: this.state.proportions,
+        };
+        fetch('/api/mongodb/households/5c15c80c2fb417300a289157', { // this route need to change
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(formData),
+        })
+        // .then(response => response.json())
+        // .then(data => {
+        //   console.log('Got this back', data);
+  
+        //   // Redirect to homepage
+        //   // this.props.history.push('/');
+        // });
+      });
+
+  }
+
   render() {
     return (
       <div className="LogTransaction">
@@ -85,7 +135,7 @@ class LogTransaction extends Component {
         <button onClick={this.onChangeAction} value="paid back">Paid Back</button>
         <input
             name="Recipient"
-            placeholder="Who recieved the money..."
+            placeholder="Who received the money..."
             value={this.state.recipient}
             onChange={this.onChangeRecipient}
           />

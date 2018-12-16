@@ -3,7 +3,7 @@
 .LogTransaction button {
   font-size: 24pt;
   background: none;
-  color: white;
+  /* color: white; */
   padding: 10px;
   width: 100%;
   display: block;

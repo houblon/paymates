@@ -47,8 +47,8 @@ app.get('/api/some/example/with/mongodb/', (request, response) => {
 app.get('/api/mongodb/:collectionName/:objectId/', (request, response) => {
   const collectionName = request.params.collectionName;
   const objectId = request.params.objectId;
-  console.log('Object ID:', objectId);
-  console.log('Custom collectionName + object ID route with MongoDB is being used...');
+  // console.log('Object ID:', objectId);
+  // console.log('Custom collectionName + object ID route with MongoDB is being used...');
 
   db.collection(collectionName)
     .find({"_id": ObjectId(objectId)})
@@ -58,6 +58,44 @@ app.get('/api/mongodb/:collectionName/:objectId/', (request, response) => {
       response.json(results);
     });
 });
+
+
+// PUT endpoint for modifying an existing item
+app.put('/api/mongodb/:collectionName/:objectId/', (request, response) => {
+  const collectionName = request.params.collectionName;
+  const objectId = request.params.objectId;
+  const data = request.body;
+  // const query = request.query;
+  console.log('Object ID:', objectId);
+  console.log('Custom PUT collectionName + object ID route with MongoDB is being used...');
+
+  // db.collection(collectionName)
+  // .find({"_id": ObjectId(objectId)})
+  db.collection(collectionName).findOneAndUpdate(
+    // {_id: ObjectId(objectId)},
+    // {},
+    {_id: ObjectId(objectId)},
+    {$push: data}, // probably want this or something like it
+    // {$push: {transactions: {"payer": "Steve","amount": 10}}},
+    {upsert: true},
+    (err, results) => {
+      if (err) throw err;
+      console.log(results);
+
+        // If we modified exactly 1, then success, otherwise failure
+        // if (results.result.nModified === 1) {
+        //   response.json({
+        //     success: true,
+        //   });
+        // } else {
+        //   response.json({
+        //     success: false,
+        //   });
+        // }
+    }
+  );
+});
+
 
 
 //
