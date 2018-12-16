@@ -67,7 +67,7 @@ app.get('/api/mongodb/:collectionName/:objectId/', (request, response) => {
 //
 // Testing custom household route (with use of MongoDB)
 // app.get('/households/:objectId/', (request, response) => {
-app.get('/household/:objectId/', (request, response) => {
+app.get('/api/household/:objectId/', (request, response) => {
   const objectId = request.params.objectId;
   console.log('Object ID:', objectId);
   console.log('Custom /household/:objectId/ route with MongoDB is being used...');

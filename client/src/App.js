@@ -7,6 +7,7 @@ import LandingPage from './components/pages/LandingPage/LandingPage.js';
 import CreateHousehold from './components/pages/CreateHousehold/CreateHousehold.js';
 import LogTransaction from './components/pages/LogTransaction/LogTransaction.js';
 import FindHousehold from './components/pages/FindHousehold/FindHousehold.js';
+import Household from './components/pages/Household/Household.js';
 
 class App extends Component {
   state = {
@@ -156,14 +157,17 @@ class App extends Component {
           <h1 className="Paymates-title"><Link to="/">paymates</Link></h1>
           <h2><Link to="/create-household/">Create Household</Link></h2>
         </nav>
-
+        <div>
+          <Link to="/household/5c1430a2e5743f0bb34749be">House 1</Link>
+          <Link to="/household/5c1430bd9c299a0bc44b4d96">House 2</Link>
+        </div>
         <div className="Paymates-mainContent">
           <Switch>
             <Route exact path='/' component={LandingPage} />
             <Route exact path='/create-household/' component={CreateHousehold} />
             <Route exact path='/log-transaction/' component={LogTransaction} />
             <Route exact path='/find-household/' component={FindHousehold} />
-            <Route exact path='/household/:id' component={CreateHousehold} />
+            <Route exact path='/household/:id' component={Household} />
           </Switch>
         </div>
 
