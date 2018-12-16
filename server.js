@@ -64,7 +64,7 @@ app.get('/api/mongodb/:collectionName/:objectId/', (request, response) => {
 app.put('/api/mongodb/:collectionName/:objectId/', (request, response) => {
   const collectionName = request.params.collectionName;
   const objectId = request.params.objectId;
-  const data = request.body;
+  const transactions = request.body;
   // const query = request.query;
   console.log('Object ID:', objectId);
   console.log('Custom PUT collectionName + object ID route with MongoDB is being used...');
@@ -75,11 +75,13 @@ app.put('/api/mongodb/:collectionName/:objectId/', (request, response) => {
     // {_id: ObjectId(objectId)},
     // {},
     {_id: ObjectId(objectId)},
-    {$push: data}, // probably want this or something like it
+    // {$push: data}, // probably want this or something like it
     // {$push: {transactions: {"payer": "Steve","amount": 10}}},
-    {upsert: true},
+    // {$push: {transactions: {datum}}},
+    {$push: {transactions}},
     (err, results) => {
       if (err) throw err;
+      // console.log(results);
       console.log(results);
 
         // If we modified exactly 1, then success, otherwise failure

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './LogTransaction.css';
+import Button from '../../Button/Button.js';
+import Input from '../../Input/Input.js';
 
 class LogTransaction extends Component {
   state = {
@@ -7,13 +9,24 @@ class LogTransaction extends Component {
     payer: '',
     action: '',
     recipient: '',
-    amount: 0,
+    amount: '',
     proportions: '',
+    household: [
+      {
+        name: '',
+        members: [
+          {
+            id: '',
+            name: '',
+          },
+        ]
+      },
+    ],
   }
 
   onChangeTransactionDate = (ev) => {
     this.setState({
-      TransactionDate: ev.target.value,
+      transactionDate: ev.target.value,
     });
   }
 
@@ -48,23 +61,29 @@ class LogTransaction extends Component {
   }
 
   submit = () => {
+    const id = this.props.match.params.id;
     const formData = {
       transactionDate: this.state.transactionDate,
       payer: this.state.payer,
       action: this.state.action,
       recipient: this.state.recipient,
       amount: this.state.amount,
-      proportions: this.state.proportions,
+      proportions: this.state.memberProportions,
     };
 
     //
     // THIS IS WHERE THE UPDATE FUNCTION NEEDS TO GO!!!
     //
-    fetch('/api/mongodb/households/5c15c80c2fb417300a289157', { // this route need to change
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(formData),
-      })
+    fetch(`/api/mongodb/households/${id}`, { // this route need to change
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(formData),
+    })
+    // fetch('/api/mongodb/households/5c15c80c2fb417300a289157', { // this route need to change
+    //     method: 'PUT',
+    //     headers: {'Content-Type': 'application/json'},
+    //     body: JSON.stringify(formData),
+    //   })
       .then(response => response.json())
       .then(data => {
         console.log('Got this back', data);
@@ -88,28 +107,45 @@ class LogTransaction extends Component {
           household: data
         })
       })
-      .then(() =>{
-        const formData = {
-          transactionDate: this.state.transactionDate,
-          payer: this.state.payer,
-          action: this.state.action,
-          recipient: this.state.recipient,
-          amount: this.state.amount,
-          proportions: this.state.proportions,
-        };
-        fetch('/api/mongodb/households/5c15c80c2fb417300a289157', { // this route need to change
-          method: 'PUT',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(formData),
+      .then(() => {
+        const memberNames = this.state.household[0].members.map(member => member.name).sort();
+        console.log(memberNames);
+        const numMembers = memberNames.length;
+        const defaultProportion = 1 / numMembers;
+        const memberProportions = memberNames.reduce(function(obj, itm) {
+          obj[itm] = defaultProportion;
+          return obj;
+        }, {});
+        this.setState({
+          memberNames: memberNames,
+          numMembers: numMembers,
+          defaultProportion: defaultProportion,
+          memberProportions: memberProportions,
         })
-        // .then(response => response.json())
-        // .then(data => {
-        //   console.log('Got this back', data);
+      })
+      // .then(() =>{
+      //   const formData = {
+      //     transactionDate: this.state.transactionDate,
+      //     payer: this.state.payer,
+      //     action: this.state.action,
+      //     recipient: this.state.recipient,
+      //     amount: this.state.amount,
+      //     // proportions: this.state.proportions,
+      //   };
+      //   fetch(`/api/mongodb/households/${id}`, { // this route need to change
+      //     method: 'PUT',
+      //     headers: {'Content-Type': 'application/json'},
+      //     body: JSON.stringify(formData),
+      //   })
+      //   // .then(response => response.json())
+      //   // .then(data => {
+      //   //   console.log('Got this back', data);
   
-        //   // Redirect to homepage
-        //   // this.props.history.push('/');
-        // });
-      });
+      //   //   // Redirect to homepage
+      //   //   // this.props.history.push('/');
+      //   // });
+      // })
+      ;
 
   }
 
@@ -117,14 +153,14 @@ class LogTransaction extends Component {
     return (
       <div className="LogTransaction">
         <h1>Log a new transaction</h1>
-        <input
+        <Input
             name="Transaction date"
             placeholder="Enter transaction date"
             value={this.state.transactionDate}
             onChange={this.onChangeTransactionDate}
           />
         <br />
-        <input
+        <Input
             name="Payer"
             placeholder="Who paid..."
             value={this.state.payer}
@@ -133,20 +169,33 @@ class LogTransaction extends Component {
         <br />
         <button onClick={this.onChangeAction} value="paid bill">Paid Bill</button>
         <button onClick={this.onChangeAction} value="paid back">Paid Back</button>
-        <input
+        <Input
             name="Recipient"
             placeholder="Who received the money..."
             value={this.state.recipient}
             onChange={this.onChangeRecipient}
           />
         <br />
-        <input
+        <Input
             name="Amount"
             placeholder="Amount"
             value={this.state.amount}
             onChange={this.onChangeAmount}
           />
-        <button onClick={this.submit}>Add transaction</button>
+        <Button onClick={this.submit} label="Add transaction" />
+        {
+          this.state.memberNames ? (
+            <div>
+              {
+                
+                this.state.memberNames.map((member, index) => (
+                  <p key={'member' + index}>{member}</p>
+                  )
+                )
+              }
+            </div>
+          ) : null
+        }
       </div>
 
     );
