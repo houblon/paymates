@@ -156,11 +156,10 @@ class App extends Component {
         <nav className="Paymates-navigation">
           <h1 className="Paymates-title"><Link to="/">paymates</Link></h1>
           <h2><Link to="/create-household/">Create Household</Link></h2>
+          <h2><Link to="/household/5c1430a2e5743f0bb34749be">House 1</Link></h2>
+          <h2><Link to="/household/5c1430bd9c299a0bc44b4d96">House 2</Link></h2>
+
         </nav>
-        <div>
-          <Link to="/household/5c1430a2e5743f0bb34749be">House 1</Link>
-          <Link to="/household/5c1430bd9c299a0bc44b4d96">House 2</Link>
-        </div>
         <div className="Paymates-mainContent">
           <Switch>
             <Route exact path='/' component={LandingPage} />
