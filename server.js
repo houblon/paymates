@@ -43,7 +43,8 @@ app.get('/api/some/example/with/mongodb/', (request, response) => {
 
 
 //
-// Custom route with params collectionName and objectId (with use of MongoDB)
+// Testing custom household route (with use of MongoDB)
+// app.get('/api/mongodb/households/:objectId/', (request, response) => {
 app.get('/api/mongodb/:collectionName/:objectId/', (request, response) => {
   const collectionName = request.params.collectionName;
   const objectId = request.params.objectId;
@@ -51,6 +52,27 @@ app.get('/api/mongodb/:collectionName/:objectId/', (request, response) => {
   console.log('Custom collectionName + object ID route with MongoDB is being used...');
 
   db.collection(collectionName)
+    .find({"_id": ObjectId(objectId)})
+    .toArray((err, results) => {
+      // Got data back.. send to client
+      if (err) throw err;
+      // response.json(results);
+      const hJson = response.json(results);
+      // console.log(hJson);
+      return hJson;
+    });
+});
+
+
+//
+// Testing custom household route (with use of MongoDB)
+// app.get('/households/:objectId/', (request, response) => {
+app.get('/api/household/:objectId/', (request, response) => {
+  const objectId = request.params.objectId;
+  console.log('Object ID:', objectId);
+  console.log('Custom /household/:objectId/ route with MongoDB is being used...');
+
+  db.collection('households')
     .find({"_id": ObjectId(objectId)})
     .toArray((err, results) => {
       // Got data back.. send to client
@@ -63,19 +85,19 @@ app.get('/api/mongodb/:collectionName/:objectId/', (request, response) => {
 //
 // Totally insecure backend routes, good for rapid prototyping
 // DELETE before use in a real application
-app.get('/api/mongodb/:collectionName/', (request, response) => {
-  const collectionName = request.params.collectionName;
+// app.get('/api/mongodb/:collectionName/', (request, response) => {
+//   const collectionName = request.params.collectionName;
 
-  // Get GET params
-  const query = request.query || {};
-  db.collection(collectionName)
-    .find(query)
-    .toArray((err, results) => {
-      // Got data back.. send to client
-      if (err) throw err;
-      response.json(results);
-    });
-});
+//   // Get GET params
+//   const query = request.query || {};
+//   db.collection(collectionName)
+//     .find(query)
+//     .toArray((err, results) => {
+//       // Got data back.. send to client
+//       if (err) throw err;
+//       response.json(results);
+//     });
+// });
 
 app.post('/api/mongodb/:collectionName/', (request, response) => {
   const collectionName = request.params.collectionName;
@@ -142,6 +164,16 @@ app.delete('/api/mongodb/:collectionName/', (request, response) => {
 });
 
 
+
+
+
+app.post('/api/mongodb/:collectionName/', (request, response) => {
+  const collection = request.params.collectionName;
+});
+
+
+
+
 /////////////////////////////////////////////
 // Boilerplate, no need to touch what's below
 
@@ -179,7 +211,7 @@ MongoClient.connect(MONGODB_URL, {useNewUrlParser: true}, (err, client) => {
       *********************************************
       * Insecure prototyping backend is running!  *
       * Only use for prototyping                  *
-      * Backend server up at ${PORT}                 *
+      * Backend server up at ${PORT}              *
       *********************************************
     `);
   })
