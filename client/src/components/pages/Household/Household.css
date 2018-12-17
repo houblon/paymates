@@ -1,2 +1,8 @@
-.Create-Household {
+.Household-Transactions, .Household-Balances {
+    display: flex;
+}
+
+.Household-Transactions div, .Household-Balances div {
+  flex: 1;
+  margin: 0 3px;
 }
