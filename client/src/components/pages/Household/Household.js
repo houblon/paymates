@@ -5,7 +5,8 @@ class Household extends Component {
   state = {
     members: [],
     transactions: [],
-    memberBalances: []
+    memberBalances: [],
+    recomendations: []
   }
   extractID = (data) => {
     return Object.values(data[0])[0]
@@ -99,8 +100,12 @@ class Household extends Component {
   }
   calculateMemberBalance = () => {
     const memberBalances = []
+    console.log(memberBalances);
+    
+    let count = 0
     for (const member of this.state.members) {
-      const balanceArr = [member[1]]
+      console.log(memberBalances);
+      const balanceObj = {} //member[1]
       const memberID = member[0]
       const memberName = member[1]
       const balance = this.sumAllBillsPaidByMember(memberID) -
@@ -108,10 +113,17 @@ class Household extends Component {
       this.sumReimbursementsSent(memberID) -
       this.sumReimbursementsReceived(memberID);
       const roundedBalance = this.roundToTwoDecimalPlaces(balance);
-      console.log(memberName + " : " + this.sumAllBillsPaidByMember(memberID) + " - " + this.sumProportionsOwed(memberID) + " + " + this.sumReimbursementsSent(memberID) + " - " + this.sumReimbursementsReceived(memberID) + " = " + roundedBalance)
-      balanceArr.push(roundedBalance)
-      memberBalances.push(balanceArr)
+      //console.log(memberName + " : " + this.sumAllBillsPaidByMember(memberID) + " - " + this.sumProportionsOwed(memberID) + " + " + this.sumReimbursementsSent(memberID) + " - " + this.sumReimbursementsReceived(memberID) + " = " + roundedBalance)
+      balanceObj.name = memberName
+      balanceObj.balance = roundedBalance
+      memberBalances.push(balanceObj)
+      count++
+      console.log(memberBalances);
+      console.log(count);
+      
     }
+    console.log(memberBalances);
+    
     return memberBalances
   }
   componentDidMount () {
@@ -122,6 +134,7 @@ class Household extends Component {
         //console.log(data)
         //console.log(Object.values(data[0])[1])
         this.setState({
+          rawData: data,
           householdID: this.extractID(data),
           householdName: this.extractName(data),
           members: this.extractMembers(data),
@@ -131,7 +144,7 @@ class Household extends Component {
             memberBalances :this.calculateMemberBalance()
           }, () => {
             this.setState({
-              //hypoTransactions: this.equalize(arr)
+              recomendations: this.equalize()
             })
           })
         })
@@ -148,11 +161,15 @@ sortBalances = (arr) => {
 countNeededLoops = (arr) => {
   let loopCount = 0
   let count = 0
-  while (count < arr.length) {
-    if (Math.abs(arr[count].balance) > this.state.members.length*.01) {
-      loopCount++
+  if (arr.length === 2) {
+    return 1
+  } else {
+    while (count < arr.length) {
+      if (Math.abs(arr[count].balance) > this.state.members.length*.01) {
+        loopCount++
+      }
+      count++
     }
-    count++
   }
   // console.log(loopCount);
   return loopCount
@@ -168,16 +185,22 @@ removeZeroBalances = (arr) => {
   }
   return newArr
 }
-equalize = (arr) => {
+equalize = () => {
+  let arr = this.state.memberBalances
+  console.log(arr);
   let recomendations = []
   this.sortBalances(arr)
   let loopCount = this.countNeededLoops(arr)
-  // console.log(loopCount);
+  //console.log(loopCount);
   let count = 0
   arr = this.removeZeroBalances(arr)
-  // console.log(arr);
+  //console.log(arr);
   while (count < loopCount) {
-    if (Math.abs(arr[0].balance) < arr[arr.length-1].balance) {
+    //console.log("while started");
+    //console.log("First: " + Math.abs(arr[0].balance));
+    //console.log("Second: " + arr[arr.length-1].balance);
+    if (Math.abs(arr[0].balance) <= arr[arr.length-1].balance) {
+      //console.log("enterred If");
       //console.log(Math.abs(arr[0].balance) + " is less than " + arr[arr.length-1].balance + "... So " + arr[0].name + " should pay " + arr[arr.length-1].name + " $" + Math.abs(arr[0].balance) + ".");
       //console.log(arr[arr.length-1].name + "'s new balance is: " + (arr[arr.length-1].balance-Math.abs(arr[0].balance)));
       recomendations.push(arr[0].name + " should pay " + arr[arr.length-1].name + " $" + Math.abs(arr[0].balance) + ".")
@@ -187,17 +210,15 @@ equalize = (arr) => {
     }
     count++
   }
-  // console.log(recomendations);
-  // console.log(arr);
+  console.log(recomendations);
+  console.log(arr);
   if (arr.length < 3) {
-    // console.log('There are 0, 1, or 2 members that have balances other than absolute zero.')
+    console.log('There are 0, 1, or 2 members that have balances other than absolute zero.')
     // console.log('Members with balances other than absolute zero after equalization: ' + arr.length);
-    this.setState({
-      recomendations: recomendations,
-      overUnder: arr
-    })
+    return recomendations
   } else if (arr.length > 2) {
     console.log('There is a problem. After equalizing there are at least 3 members with balances other than absolute zero.')
+    return arr
   }
 }
 
@@ -214,7 +235,13 @@ equalize = (arr) => {
             <span> Name: {name}, ID: {id}.</span>
           ))
         }
-        <h2>Transactions:</h2>
+        <h2>Recomendations:</h2>
+        {
+          this.state.recomendations.map(rec => (
+            <span>{rec}</span>
+          ))
+        }
+      <h2>Transactions:</h2>
         {
           this.state.transactions.map(([id, date, action, amount, payer_ID, payee, proportions ]) => (
             <div className="Household-Transactions">
@@ -230,11 +257,8 @@ equalize = (arr) => {
         }
         <h2>Balances:</h2>
         {
-          this.state.memberBalances.map(([name, balance]) => (
-            <div className="Household-Balances">
-              <div>Name: {name}</div>
-              <div>Balance: {balance}</div>
-            </div>
+          this.state.memberBalances.map(balance => (
+            <div>{balance.name} : {balance.balance}</div>
           ))
         }
       </div>
