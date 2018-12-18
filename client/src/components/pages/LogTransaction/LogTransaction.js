@@ -74,12 +74,12 @@ class LogTransaction extends Component {
     //
     // THIS IS WHERE THE UPDATE FUNCTION NEEDS TO GO!!!
     //
-    fetch(`/api/mongodb/households/${id}`, { // this route need to change
+    fetch(`/api/households/${id}`, { // this route need to change
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(formData),
     })
-    // fetch('/api/mongodb/households/5c15c80c2fb417300a289157', { // this route need to change
+    // fetch('/api/households/5c15c80c2fb417300a289157', { // this route need to change
     //     method: 'PUT',
     //     headers: {'Content-Type': 'application/json'},
     //     body: JSON.stringify(formData),
@@ -99,7 +99,7 @@ class LogTransaction extends Component {
     // console.log(result);
     const id = this.props.match.params.id;
     console.log(id);
-    fetch(`/api/mongodb/households/${id}`)
+    fetch(`/api/households/${id}`)
       .then(response => response.json())
       .then(data => {
         console.log(data);
@@ -132,7 +132,7 @@ class LogTransaction extends Component {
       //     amount: this.state.amount,
       //     // proportions: this.state.proportions,
       //   };
-      //   fetch(`/api/mongodb/households/${id}`, { // this route need to change
+      //   fetch(`/api/households/${id}`, { // this route need to change
       //     method: 'PUT',
       //     headers: {'Content-Type': 'application/json'},
       //     body: JSON.stringify(formData),
