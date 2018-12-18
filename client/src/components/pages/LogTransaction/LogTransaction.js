@@ -63,14 +63,15 @@ class LogTransaction extends Component {
   submit = () => {
     const id = this.props.match.params.id;
     const formData = {
-      transactionDate: this.state.transactionDate,
-      payer: this.state.payer,
+      date: this.state.transactionDate,
+      payer_ID: this.state.payer,
       action: this.state.action,
-      recipient: this.state.recipient,
+      recipient_ID: this.state.recipient,
       amount: this.state.amount,
       proportions: this.state.memberProportions,
     };
-
+    console.log(formData);
+    
     //
     // THIS IS WHERE THE UPDATE FUNCTION NEEDS TO GO!!!
     //
