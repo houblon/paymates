@@ -9,11 +9,11 @@ class CreateHousehold extends Component {
     householdName: '',
     householdMembers: [
       {
-        position: 1,
+        id: 1,
         name: '',
       },
       {
-        position: 2,
+        id: 2,
         name: '',
       }
     ],
@@ -48,7 +48,7 @@ class CreateHousehold extends Component {
 
     if (name !== '') {
       const newIndex = this.state.householdMembers.length + 1;
-      this.setState({ householdMembers: this.state.householdMembers.concat([{ position: newIndex, name: '' }]) });
+      this.setState({ householdMembers: this.state.householdMembers.concat([{ id: newIndex, name: '' }]) });
     } else {
       console.log('Please enter a name');
     }
