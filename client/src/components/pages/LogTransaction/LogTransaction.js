@@ -14,17 +14,6 @@ class LogTransaction extends Component {
     currency: 'USD',
     proportions: [],
     members: []
-    // household: [
-    //   {
-    //     name: '',
-    //     members: [
-    //       {
-    //         id: '',
-    //         name: '',
-    //       },
-    //     ]
-    //   },
-    // ],
   }
 
   onChangeTransactionDate = (ev) => {
@@ -32,57 +21,53 @@ class LogTransaction extends Component {
       date: ev.target.value,
     });
   }
-
   onChangePayer = (ev) => {
     this.setState({
       payer_ID: ev.target.value,
     });
   }
-
   onChangePayee = (ev) => {
     this.setState({
       payee: ev.target.value,
     });
   }
-
   onChangeAction = (ev) => {
     this.setState({
       action: ev.target.value,
     });
   }
-
   onChangeRecipient = (ev) => {
     this.setState({
       recipient_ID: ev.target.value,
     });
   }
-
   onChangeAmount = (ev) => {
     this.setState({
       amount: ev.target.value,
     });
   }
-  
-  onChangeProportions = (ev) => {
-    this.setState({
-      proportions: ev.target.value,
-    });
-  }
-
-  submit = () => {
+  // TEMPORARILY ANTIQUATED
+  // onChangeProportions = (ev) => {
+  //   this.setState({
+  //     proportions: ev.target.value,
+  //   });
+  // }
+  buildFormData = () => {
     let formData = {}
-    const id = this.props.match.params.id;
     if (this.state.action === "bill") {
       formData = {
       date: this.state.transactionDate,
       payer_ID: this.state.payer_ID,
       payee: this.state.payee,
       action: this.state.action,
-      recipient_ID: this.state.recipient_ID,
       amount: this.state.amount,
       currency: this.state.currency,
-      proportions: this.state.memberProportions
+      proportions: this.state.proportions
     }
+    // console.log("Its a bill");
+    // console.log("Inside bill formData: ");
+    // console.log(formData);
+    
     } else if (this.state.action === "reimbursement") {
       formData = {
       date: this.state.transactionDate,
@@ -92,31 +77,30 @@ class LogTransaction extends Component {
       amount: this.state.amount,
       currency: this.state.currency
     }
+    // console.log("Its a reimbursement");
+    // console.log("Inside reim formData: ");
+    // console.log(formData);
   }
+    console.log("Sent formData:");
     console.log(formData);
     
-    //
+    return formData
+  }
+  submit = () => {
+  const id = this.props.match.params.id;
     // THIS IS WHERE THE UPDATE FUNCTION NEEDS TO GO!!!
-    //
     fetch(`/api/households/${id}`, { // this route need to change
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(formData),
+      body: JSON.stringify(this.buildFormData()),
     })
-    // fetch('/api/households/5c15c80c2fb417300a289157', { // this route need to change
-    //     method: 'PUT',
-    //     headers: {'Content-Type': 'application/json'},
-    //     body: JSON.stringify(formData),
-    //   })
       .then(response => response.json())
       .then(data => {
         console.log('Got this back', data);
-
         // Redirect to homepage
         // this.props.history.push('/');
       });
   }
-
   setDefaultProportions = (membersSummary) => {
     console.log(membersSummary);
     let defaultProportions = []
@@ -129,12 +113,6 @@ class LogTransaction extends Component {
       //console.log(memberProportion);
       defaultProportions.push(memberProportion)
     }
-    console.log(defaultProportions);
-    
-    // const memberProportions = memberNames.reduce(function(obj, itm) {
-    //   obj[itm] = defaultProportion;
-    //   return obj;
-    // }
     return defaultProportions
   }
 
@@ -152,55 +130,10 @@ class LogTransaction extends Component {
           rawData: data,
           householdID: data[0]._id,
           householdName: data[0].name,
-          members: data[0].members
-        }, () => {
-          console.log(this.state.proportions)
-          this.setState({
-            proportions: this.setDefaultProportions(this.state.members)
-          }, () => {
-            console.log(this.state);
-            
-          })
+          members: data[0].members,
+          proportions: this.setDefaultProportions(data[0].members)
         })
       })
-      .then(() => {
-        //const memberNames = this.state.household[0].members.map(member => member.name).sort();
-        //console.log(memberNames);
-        //const numMembers = memberNames.length;
-        //const defaultProportion = 1 / numMembers;
-        
-        
-        // this.setState({
-        //   memberNames: memberNames,
-        //   numMembers: numMembers,
-        //   defaultProportion: defaultProportion,
-        //   memberProportions: memberProportions,
-        // })
-      })
-      // .then(() =>{
-      //   const formData = {
-      //     transactionDate: this.state.transactionDate,
-      //     payer: this.state.payer,
-      //     action: this.state.action,
-      //     recipient: this.state.recipient,
-      //     amount: this.state.amount,
-      //     // proportions: this.state.proportions,
-      //   };
-      //   fetch(`/api/households/${id}`, { // this route need to change
-      //     method: 'PUT',
-      //     headers: {'Content-Type': 'application/json'},
-      //     body: JSON.stringify(formData),
-      //   })
-      //   // .then(response => response.json())
-      //   // .then(data => {
-      //   //   console.log('Got this back', data);
-  
-      //   //   // Redirect to homepage
-      //   //   // this.props.history.push('/');
-      //   // });
-      // })
-      ;
-
   }
 
   render() {
@@ -214,9 +147,6 @@ class LogTransaction extends Component {
             onChange={this.onChangeTransactionDate}
           />
         <br />
-
-        <h2>Household Name: {this.state.householdName}</h2>
-        <h2>Household ID: {this.state.householdID}</h2>
         <h2>Who Paid: {this.state.payer_ID}</h2>
         {
           this.state.members.map(member => (
@@ -227,18 +157,10 @@ class LogTransaction extends Component {
             />
           ))
         }
-        {/* <Input
-            name="Payer"
-            placeholder="Who paid..."
-            value={this.state.payer}
-            onChange={this.onChangePayer}
-          /> */}
         <br />
-
         <h2>Action type: {this.state.action}</h2>
         <button onClick={this.onChangeAction} value="bill">Paid Bill</button>
         <button onClick={this.onChangeAction} value="reimbursement">Paid Back</button>
-
         <h2>Reimbursement Recipient: {this.state.recipient_ID}</h2>
         {
           this.state.members.map(member => (
@@ -262,22 +184,11 @@ class LogTransaction extends Component {
             value={this.state.amount}
             onChange={this.onChangeAmount}
           />
-        <Button onClick={this.submit} label="Add transaction" />
-        {
-          this.state.memberNames ? (
-            <div>
-              {
-                
-                this.state.memberNames.map((member, index) => (
-                  <p key={'member' + index}>{member}</p>
-                  )
-                )
-              }
-            </div>
-          ) : null
-        }
+        <Button
+          onClick={this.submit}
+          label="Add transaction"
+          />
       </div>
-
     );
   }
 }
