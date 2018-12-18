@@ -38,27 +38,31 @@ class CreateHousehold extends Component {
   }
 
   onAddMember = () => {
-    const newIndex = this.state.householdMembers.length + 1;
-    this.setState({ householdMembers: this.state.householdMembers.concat([{ position: newIndex, name: '' }]) });
-
     const lastItem = this.state.householdMembers.length - 1;
     const name = this.state.householdMembers[lastItem].name;
     console.log(name);
-    const formData = {
-      name: name
-    };
-    fetch('/api/mongodb/members/', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(formData),
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Added a member, got this response:', data);
 
-      // Redirect to blog
-      // this.props.history.push('/');
-    });
+    if (name !== '') {
+      const newIndex = this.state.householdMembers.length + 1;
+      this.setState({ householdMembers: this.state.householdMembers.concat([{ position: newIndex, name: '' }]) });
+    } else {
+      console.log('Please enter a name');
+    }
+    // const formData = {
+    //   name: name
+    // };
+    // fetch('/api/mongodb/members/', {
+    //   method: 'POST',
+    //   headers: {'Content-Type': 'application/json'},
+    //   body: JSON.stringify(formData),
+    // })
+    // .then(response => response.json())
+    // .then(data => {
+    //   console.log('Added a member, got this response:', data);
+
+    //   // Redirect to blog
+    //   // this.props.history.push('/');
+    // });
   }
 
   onChangeDefaultCurrency = (ev) => {
@@ -79,25 +83,54 @@ class CreateHousehold extends Component {
   }
 
   submit = () => {
-    console.log('submit form')
+    console.log('submit function invoked')
     const formData = {
       name: this.state.householdName,
       members: this.state.householdMembers,
       defaultCurrency: this.state.defaultCurrency
     };
 
-    fetch('/api/mongodb/households/', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(formData),
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Got this back', data);
+    let emptyMemberNameField = false;
 
-        // Redirect to blog
-        this.props.history.push('/');
-      });
+    for (const member of this.state.householdMembers) {
+      if (member.name === '') {
+        emptyMemberNameField = true;
+      }
+    }
+
+    // const newhouseholdMembers = this.state.householdMembers.map((member, state_index) => {
+    //   if (index !== state_index) return member;
+    //   return { ...member, name: ev.target.value };
+    // });
+    // this.setState({ householdMembers: newhouseholdMembers });
+
+    if (emptyMemberNameField) {
+      console.log('please enter member name');
+    }
+
+    if (this.state.householdName === '') {
+      console.log('needs a household name');
+    }
+
+    if (this.state.householdMembers.length < 2) {
+      console.log('must have at least 2 household members');
+    }
+
+    if (this.state.householdName !== '' &&
+        this.state.householdMembers.length > 1) {
+      fetch('/api/mongodb/households/', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(formData),
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Got this back', data);
+
+          // Redirect to blog
+          this.props.history.push('/');
+        });
+    }
   }
 
   mongoHouseholdsTest = (collectionName, objectId) => {
@@ -142,7 +175,13 @@ class CreateHousehold extends Component {
             <Input
               type="text"
               name={'member_' + String(index + 1)}
-              placeholder={`Member #${index + 1} name`}
+              placeholder={
+                member.errorMessage ? (
+                  member.errorMessage
+                ) : (
+                  `Member #${index + 1} name`
+                )
+              }
               value={member.name}
               onChange={this.onMemberNameChange(index)}
             />
