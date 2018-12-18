@@ -59,6 +59,46 @@ app.get('/api/:collectionName/:objectId/', (request, response) => {
 });
 
 
+// PUT endpoint for modifying an existing item
+app.put('/api/mongodb/:collectionName/:objectId/', (request, response) => {
+  const collectionName = request.params.collectionName;
+  const objectId = request.params.objectId;
+  const transactions = request.body;
+  // const query = request.query;
+  console.log('Object ID:', objectId);
+  console.log('Custom PUT collectionName + object ID route with MongoDB is being used...');
+
+  // db.collection(collectionName)
+  // .find({"_id": ObjectId(objectId)})
+  db.collection(collectionName).findOneAndUpdate(
+    // {_id: ObjectId(objectId)},
+    // {},
+    {_id: ObjectId(objectId)},
+    // {$push: data}, // probably want this or something like it
+    // {$push: {transactions: {"payer": "Steve","amount": 10}}},
+    // {$push: {transactions: {datum}}},
+    {$push: {transactions}},
+    (err, results) => {
+      if (err) throw err;
+      // console.log(results);
+      console.log(results);
+
+        // If we modified exactly 1, then success, otherwise failure
+        // if (results.result.nModified === 1) {
+        //   response.json({
+        //     success: true,
+        //   });
+        // } else {
+        //   response.json({
+        //     success: false,
+        //   });
+        // }
+    }
+  );
+});
+
+
+
 //
 // Custom POST route with param collectionName (with use of MongoDB)
 app.post('/api/:collectionName/', (request, response) => {

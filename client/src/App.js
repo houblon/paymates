@@ -31,7 +31,7 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={LandingPage} />
             <Route exact path='/create-household/' component={CreateHousehold} />
-            <Route exact path='/log-transaction/' component={LogTransaction} />
+            <Route exact path='/household/:id/log-transaction/' component={LogTransaction} />
             <Route exact path='/find-household/' component={FindHousehold} />
             <Route exact path='/household/:id' component={Household} />
           </Switch>
