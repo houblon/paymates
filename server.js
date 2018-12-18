@@ -15,7 +15,6 @@ app.use(logger);
 /////////////////////////////////////////////
 
 
-
 //
 // Example route (without use of MongoDB)
 app.get('/api/some/example/route/', (request, response) => {
@@ -43,12 +42,12 @@ app.get('/api/some/example/with/mongodb/', (request, response) => {
 
 
 //
-// Custom route with params collectionName and objectId (with use of MongoDB)
-app.get('/api/mongodb/:collectionName/:objectId/', (request, response) => {
+// Custom GET route with params collectionName and objectId (with use of MongoDB)
+app.get('/api/:collectionName/:objectId/', (request, response) => {
   const collectionName = request.params.collectionName;
   const objectId = request.params.objectId;
-  console.log('Object ID:', objectId);
-  console.log('Custom collectionName + object ID route with MongoDB is being used...');
+  // console.log('Object ID:', objectId);
+  // console.log('Custom collectionName + object ID route with MongoDB is being used...');
 
   db.collection(collectionName)
     .find({"_id": ObjectId(objectId)})
@@ -60,10 +59,109 @@ app.get('/api/mongodb/:collectionName/:objectId/', (request, response) => {
 });
 
 
+// PUT endpoint for modifying an existing item
+app.put('/api/mongodb/:collectionName/:objectId/', (request, response) => {
+  const collectionName = request.params.collectionName;
+  const objectId = request.params.objectId;
+  const transactions = request.body;
+  // const query = request.query;
+  console.log('Object ID:', objectId);
+  console.log('Custom PUT collectionName + object ID route with MongoDB is being used...');
+
+  // db.collection(collectionName)
+  // .find({"_id": ObjectId(objectId)})
+  db.collection(collectionName).findOneAndUpdate(
+    // {_id: ObjectId(objectId)},
+    // {},
+    {_id: ObjectId(objectId)},
+    // {$push: data}, // probably want this or something like it
+    // {$push: {transactions: {"payer": "Steve","amount": 10}}},
+    // {$push: {transactions: {datum}}},
+    {$push: {transactions}},
+    (err, results) => {
+      if (err) throw err;
+      // console.log(results);
+      console.log(results);
+
+        // If we modified exactly 1, then success, otherwise failure
+        // if (results.result.nModified === 1) {
+        //   response.json({
+        //     success: true,
+        //   });
+        // } else {
+        //   response.json({
+        //     success: false,
+        //   });
+        // }
+    }
+  );
+});
+
+
+
+//
+// Custom POST route with param collectionName (with use of MongoDB)
+app.post('/api/:collectionName/', (request, response) => {
+  const collectionName = request.params.collectionName;
+  const data = request.body;
+
+  db.collection(collectionName)
+    .insert(data, (err, results) => {
+      // Got data back.. send to client
+      if (err) throw err;
+
+      response.json({
+        'success': true,
+        'results': results,
+      });
+    });
+});
+
+
+//
+// Custom PUT route with params collectionName and objectId (with use of MongoDB)
+app.put('/api/:collectionName/:objectId/', (request, response) => {
+  const collectionName = request.params.collectionName;
+  const objectId = request.params.objectId;
+  const transactions = request.body;
+  // const query = request.query;
+  console.log('Object ID:', objectId);
+  console.log('Custom PUT collectionName + object ID route with MongoDB is being used...');
+
+  // db.collection(collectionName)
+  // .find({"_id": ObjectId(objectId)})
+  db.collection(collectionName).findOneAndUpdate(
+    // {_id: ObjectId(objectId)},
+    // {},
+    {_id: ObjectId(objectId)},
+    // {$push: data}, // probably want this or something like it
+    // {$push: {transactions: {"payer": "Steve","amount": 10}}},
+    // {$push: {transactions: {datum}}},
+    {$push: {transactions}},
+    (err, results) => {
+      if (err) throw err;
+      // console.log(results);
+      console.log(results);
+
+        // If we modified exactly 1, then success, otherwise failure
+        // if (results.result.nModified === 1) {
+        //   response.json({
+        //     success: true,
+        //   });
+        // } else {
+        //   response.json({
+        //     success: false,
+        //   });
+        // }
+    }
+  );
+});
+
+
 //
 // Totally insecure backend routes, good for rapid prototyping
 // DELETE before use in a real application
-app.get('/api/mongodb/:collectionName/', (request, response) => {
+app.get('/api/example/:collectionName/', (request, response) => {
   const collectionName = request.params.collectionName;
 
   // Get GET params
@@ -77,7 +175,8 @@ app.get('/api/mongodb/:collectionName/', (request, response) => {
     });
 });
 
-app.post('/api/mongodb/:collectionName/', (request, response) => {
+
+app.post('/api/example/:collectionName/', (request, response) => {
   const collectionName = request.params.collectionName;
   const data = request.body;
 
@@ -95,7 +194,7 @@ app.post('/api/mongodb/:collectionName/', (request, response) => {
 
 
 // PUT endpoint for modifying an existing item
-app.put('/api/mongodb/:collectionName/', (request, response) => {
+app.put('/api/example/:collectionName/', (request, response) => {
   const collectionName = request.params.collectionName;
   const data = request.body;
   const query = request.query;
@@ -119,7 +218,7 @@ app.put('/api/mongodb/:collectionName/', (request, response) => {
 
 
 // D in CRUD, delete a single item with given criteria
-app.delete('/api/mongodb/:collectionName/', (request, response) => {
+app.delete('/api/example/:collectionName/', (request, response) => {
   const collectionName = request.params.collectionName;
   const data = request.body;
   const query = request.query;
