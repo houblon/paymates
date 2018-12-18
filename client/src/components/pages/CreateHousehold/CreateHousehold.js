@@ -51,7 +51,7 @@ class CreateHousehold extends Component {
     // const formData = {
     //   name: name
     // };
-    // fetch('/api/mongodb/members/', {
+    // fetch('/api/members/', {
     //   method: 'POST',
     //   headers: {'Content-Type': 'application/json'},
     //   body: JSON.stringify(formData),
@@ -71,15 +71,7 @@ class CreateHousehold extends Component {
     });
   }
   componentDidMount() {
-    // console.log('doing thing');
-    // fetch('/api/mongodb/blogposts/')
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log('Got data back', data);
-    //     this.setState({
-    //       blogPosts: data,
-    //     });
-    //   });
+    // console.log('componentDidMount');
   }
 
   submit = () => {
@@ -118,7 +110,7 @@ class CreateHousehold extends Component {
 
     if (this.state.householdName !== '' &&
         this.state.householdMembers.length > 1) {
-      fetch('/api/mongodb/households/', {
+      fetch('/api/households/', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(formData),
@@ -134,7 +126,7 @@ class CreateHousehold extends Component {
   }
 
   mongoHouseholdsTest = (collectionName, objectId) => {
-    fetch(`/api/mongodb/${collectionName}/${objectId}`) // /api/mongodb/:collectionName/:objectId/ 5c146f11e5fada39ca922968
+    fetch(`/api/${collectionName}/${objectId}`) // /api/mongodb/:collectionName/:objectId/ 5c146f11e5fada39ca922968
       .then(response => response.json())
       .then(data => {
         console.log(`Got data back from /api/mongodb/${collectionName}/${objectId}`, data);
