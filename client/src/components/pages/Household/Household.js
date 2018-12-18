@@ -97,7 +97,7 @@ class Household extends Component {
   
   componentDidMount () {
     const id = this.props.match.params.id;
-    fetch(`/api/household/${id}`)
+    fetch(`/api/households/${id}`)
     .then(response => response.json())
       .then(data => {
         //console.log(data)
