@@ -11,6 +11,10 @@ class CreateHousehold extends Component {
       {
         position: 1,
         name: '',
+      },
+      {
+        position: 2,
+        name: '',
       }
     ],
     defaultCurrency: 'USD',
