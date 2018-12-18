@@ -61,7 +61,7 @@ app.get('/api/:collectionName/:objectId/', (request, response) => {
 
 //
 // Custom POST route with param collectionName (with use of MongoDB)
-app.post('/api/example/:collectionName/', (request, response) => {
+app.post('/api/:collectionName/', (request, response) => {
   const collectionName = request.params.collectionName;
   const data = request.body;
 
