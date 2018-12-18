@@ -4,8 +4,8 @@ import './Household.css';
 class Household extends Component {
   state = {
     members: [],
-    recomendations: []
-    // transactions: [],
+    recomendations: [],
+    transactions: [],
     // memberBalances: [],
   }
   transformTransactions = (data) => {
@@ -204,7 +204,34 @@ equalize = (obj) => {
             <p>{rec}</p>
           ))
         }
-        
+        <h2>Transactions:</h2>
+        {
+          this.state.transactions.map(transaction => (
+            <div className="Household-Transactions">
+              <div>Transaction ID: {transaction.id}</div>
+                <div>Date: {transaction.date}</div>
+                <div>Action: {transaction.action}</div>
+                <div>Amount: {transaction.amount}</div>
+                {
+                  transaction.currency ? <div>Currency: {transaction.currency}</div> : null
+                }
+                <div>Payer: {transaction.payer_ID}</div>
+                {
+                  transaction.payee ? <div>Payee: {transaction.payee}</div> : null
+                }
+                {
+                  transaction.recipient_ID ? <div>Recipient: {transaction.recipient_ID}</div> : null
+                }
+                {
+                  transaction.proportions ? transaction.proportions.map(proportion => (
+                    <div>Proportions:
+                      <div>{proportion.member_ID} : {proportion.proportion}</div>
+                    </div>
+                  )) : null
+                }
+            </div>
+          ))
+        }
         {/* <h2>Transactions:</h2>
           {
             this.state.transactions.map(([id, date, action, amount, payer_ID, payee, proportions ]) => (
