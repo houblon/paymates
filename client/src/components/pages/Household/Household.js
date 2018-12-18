@@ -232,26 +232,12 @@ equalize = (obj) => {
             </div>
           ))
         }
-        {/* <h2>Transactions:</h2>
-          {
-            this.state.transactions.map(([id, date, action, amount, payer_ID, payee, proportions ]) => (
-              <div className="Household-Transactions">
-                <div>Transaction ID: {id}</div>
-                <div>Date: {date}</div>
-                <div>Action: {action}</div>
-                <div>Amount: {amount}</div>
-                <div>Payer: {payer_ID}</div>
-                <div>Payee: {payee}</div>
-                <div>Proportions: {proportions}</div>
-              </div>
-            ))
-        } */}
-        {/* <h2>Balances:</h2>
+        <h2>Balances:</h2>
         {
-          this.state.memberBalances.map(balance => (
-            <div>{balance.name} : {balance.balance}</div>
+          this.state.members.map(memberSummary => (
+            <div>{memberSummary.name} - {memberSummary.balance}</div>
           ))
-        } */}
+        }
       </div>
     );
   }
