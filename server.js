@@ -60,6 +60,25 @@ app.get('/api/:collectionName/:objectId/', (request, response) => {
 
 
 //
+// Custom POST route with param collectionName (with use of MongoDB)
+app.post('/api/example/:collectionName/', (request, response) => {
+  const collectionName = request.params.collectionName;
+  const data = request.body;
+
+  db.collection(collectionName)
+    .insert(data, (err, results) => {
+      // Got data back.. send to client
+      if (err) throw err;
+
+      response.json({
+        'success': true,
+        'results': results,
+      });
+    });
+});
+
+
+//
 // Custom PUT route with params collectionName and objectId (with use of MongoDB)
 app.put('/api/:collectionName/:objectId/', (request, response) => {
   const collectionName = request.params.collectionName;
