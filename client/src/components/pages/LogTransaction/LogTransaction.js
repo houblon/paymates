@@ -3,6 +3,7 @@ import './LogTransaction.css';
 import Button from '../../Button/Button.js';
 import Input from '../../Input/Input.js';
 import SelectList from 'react-widgets/lib/SelectList';
+import { Link } from 'react-router-dom'
 
 class LogTransaction extends Component {
   state = {
@@ -199,6 +200,7 @@ class LogTransaction extends Component {
     return (
       <div className="LogTransaction">
         <h1>Log a new transaction</h1>
+        <h3><Link to={"/household/" + this.state.householdID}>Back to Household report</Link></h3>
         <div className=''>
         <Input
           name="Transaction date"

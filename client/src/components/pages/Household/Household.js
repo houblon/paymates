@@ -190,6 +190,7 @@ class Household extends Component {
         <h1>Household Report</h1>
         <h2>Household Name: {this.state.householdName}</h2>
         <h2>Household ID: {this.state.householdID}</h2>
+        <h3><Link to={"/household/" + this.state.householdID + "/log-transaction"}>Log a transaction</Link></h3>
         <h2>Members:</h2>
         {
           this.state.members.map(member => (
