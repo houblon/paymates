@@ -94,7 +94,6 @@ class Household extends Component {
     }
     return membersSummary
   }
-  
   componentDidMount () {
     const id = this.props.match.params.id;
     fetch(`/api/households/${id}`)
@@ -118,14 +117,13 @@ class Household extends Component {
         })
       });
   }
-
-sortBalances = (arr) => {
+  sortBalances = (arr) => {
   console.log(arr);
   arr.sort(function (a, b) {
     return a[1] - b[1];
   })
-}
-countNeededLoops = (arr) => {
+  }
+  countNeededLoops = (arr) => {
   let loopCount = 0
   let count = 0
   if (arr.length === 2) {
@@ -142,9 +140,8 @@ countNeededLoops = (arr) => {
   }
   // console.log(loopCount);
   return loopCount
-}
-
-equalize = (obj) => {
+  }
+  equalize = (obj) => {
   let recomendations = []
   let arr = []
   for (const summary of obj) {
@@ -183,7 +180,7 @@ equalize = (obj) => {
     return "Hello"
   }
   return recomendations
-}
+  }
 
 ///
   render() {
