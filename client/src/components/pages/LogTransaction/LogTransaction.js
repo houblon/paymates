@@ -6,6 +6,8 @@ import SelectList from 'react-widgets/lib/SelectList';
 
 class LogTransaction extends Component {
   state = {
+    reimbursementShowBool: 'hide',
+    billShowBool: 'hide',
     transactionDate: '',
     payer_ID: '',
     payee: '',
@@ -24,25 +26,35 @@ class LogTransaction extends Component {
   }
   onChangePayer = (ev) => {
     this.setState({
-      // payer_ID: ev.target.value,
       payer_ID: ev.value,
     });
   }
   onChangePayee = (ev) => {
     this.setState({
-      // payee: ev.target.value,
-      payee: ev.value,
+      payee: ev.target.value,
     });
   }
   onChangeAction = (ev) => {
     this.setState({
-      // action: ev.target.value,
       action: ev.value,
     });
+
+    if (ev.value === 'bill') {
+      this.setState({
+        reimbursementShowBool: 'hide',
+        billShowBool: '',
+        recipient_ID: '',
+      });  
+    } else {
+      this.setState({
+        reimbursementShowBool: '',
+        billShowBool: 'hide',
+        payee: '',
+      });
+    }
   }
   onChangeRecipient = (ev) => {
     this.setState({
-      // recipient_ID: ev.target.value,
       recipient_ID: ev.value,
     });
   }
@@ -172,30 +184,33 @@ class LogTransaction extends Component {
     return (
       <div className="LogTransaction">
         <h1>Log a new transaction</h1>
+        <div className=''>
         <Input
           name="Transaction date"
           placeholder="Enter transaction date"
           value={this.state.transactionDate}
           onChange={this.onChangeTransactionDate}
         />
-        <br />
-        <h2>Who Paid: {this.state.payer_ID}</h2>
-        <SelectList
-          data={
-            this.state.members.map(member => (
-              {
-                value: member.id,
-                label: member.name
-              }
-            ))
-          }
-          name='payer'
-          onChange={this.onChangePayer}
-          textField='label'
-          value={this.state.payer_ID}
-          valueField='value'
-        />
-        <br />
+        </div>
+        <div className=''>
+          <h2>Who Paid: {this.state.payer_ID}</h2>
+          <SelectList
+            data={
+              this.state.members.map(member => (
+                {
+                  value: member.id,
+                  label: member.name
+                }
+              ))
+            }
+            name='payer'
+            onChange={this.onChangePayer}
+            textField='label'
+            value={this.state.payer_ID}
+            valueField='value'
+          />
+        </div>
+        <div className=''>
         <h2>Action type: {this.state.action}</h2>
           <SelectList
             data={
@@ -218,52 +233,69 @@ class LogTransaction extends Component {
             value={this.state.action}
             valueField='value'
           />
-        <h2>Reimbursement Recipient: {this.state.recipient_ID}</h2>
-          <SelectList
-            data={
-              this.state.members.map(member => (
-                {
-                  value: member.id,
-                  label: member.name
-                }
-              ))
-            }
-            name='recipient'
-            onChange={this.onChangeRecipient}
-            textField='label'
-            value={this.state.recipient_ID}
-            valueField='value'
+        </div>
+        <div className={this.state.reimbursementShowBool}>
+          <h2>Reimbursement Recipient: {this.state.recipient_ID}</h2>
+          {
+            this.state.members.map(member => (
+              member.id !== this.state.payer_ID ? (
+                <SelectList
+                  data={
+                    [
+                      {
+                        value: member.id,
+                        label: member.name
+                      }
+                    ]
+
+                  }
+                  name='recipient'
+                  onChange={this.onChangeRecipient}
+                  textField='label'
+                  value={this.state.recipient_ID}
+                  valueField='value'
+                />
+              ) : null
+            ))
+          }
+        </div>
+        <div className={this.state.billShowBool}>
+          <Input
+            name="Business name"
+            placeholder="Paid what bill..."
+            value={this.state.payee}
+            onChange={this.onChangePayee}
           />
-        <Input
-          name="Business name"
-          placeholder="Paid what bill..."
-          value={this.state.payee}
-          onChange={this.onChangePayee}
-        />
-        <br />
-        <Input
-          name="Amount"
-          placeholder="Amount"
-          value={this.state.amount}
-          onChange={this.onChangeAmount}
-        />
-        {
-          this.state.members.map(member => (
-            <div>
-              <label>{member.name}'s proportion of the bill:</label>
-            <Input
-              name={member.name + "'s proportion"}
-              placeholder={member.name + "'s proportion"}
-              value={member.proportion}
-              onChange={this.onChangeProportion}
-            />
-            </div>
-          ))
-        }
-        <Button
-          onClick={this.submit}
-          label="Add transaction"
-        />
+        </div>
+        <div className=''>
+          <Input
+            name="Amount"
+            placeholder="Amount"
+            value={this.state.amount}
+            onChange={this.onChangeAmount}
+          />
+        </div>
+        <div className={this.state.billShowBool}>
+          {
+            this.state.members.map(member => (
+              <div>
+                <label>{member.name}'s proportion of the bill:</label>
+              <Input
+                name={member.name + "'s proportion"}
+                placeholder={member.name + "'s proportion"}
+                value={member.proportion}
+                onChange={this.onChangeProportion}
+              />
+              </div>
+            ))
+          }
+        </div>
+        <div className=''>
+          <Button
+            onClick={this.submit}
+            label="Add transaction"
+          />
+        </div>
       </div>
     );
   }

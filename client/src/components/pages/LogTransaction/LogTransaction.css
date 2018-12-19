@@ -1,3 +1,12 @@
+/* React Widget SelectList component class */
+/* .rw-select-list {
+  padding: 0;
+} */
+
+.hide {
+  display: none;
+}
+
 /* React Widget list */
 .rw-list {
   padding: 0;
