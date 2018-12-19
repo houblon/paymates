@@ -88,20 +88,37 @@ class LogTransaction extends Component {
     
     return formData
   }
+
+  validateAmount = () => {
+    return true;
+  }      
+  
+  validate = () => {
+    if (this.validateAmount /*&& this.validatesomethingelse */) {
+      return true
+    }
+  }
   submit = () => {
-    const id = this.props.match.params.id;
-      // THIS IS WHERE THE UPDATE FUNCTION NEEDS TO GO!!!
-      fetch(`/api/households/${id}`, { // this route need to change
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(this.buildFormData()),
-      })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Got this back', data);
-          // Redirect to homepage
-          // this.props.history.push('/');
-        });
+    if (this.validate() === true) { //goes through each field does all its stuff & if FALSE the fields that need the user to fix can be stored in the state.
+          const id = this.props.match.params.id;
+            // THIS IS WHERE THE UPDATE FUNCTION NEEDS TO GO!!!
+            fetch(`/api/households/${id}`, { // this route need to change
+              method: 'PUT',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify(this.buildFormData()),
+            })
+              .then(response => response.json())
+              .then(data => {
+                console.log('Got this back', data);
+                // Redirect to homepage
+                // this.props.history.push('/');
+              });
+      } else {
+        this.renderErrors() // Pickup where this.validate left off & use what got set in state.
+      }
+  }
+  renderErrors = () => {
+    console.log("Errors were found.");
   }
   setDefaultProportions = (membersSummary) => {
     console.log(membersSummary);
