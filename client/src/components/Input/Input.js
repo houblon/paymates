@@ -7,6 +7,7 @@ const Input = (props) => (
     name={props.name}
     placeholder={props.placeholder}
     value={props.value}
+    id={props.id} // Using the ID parameter for passing ID to function. Asking Michael / Maddy about best practices on this.
     onChange={props.onChange}
   >
     {props.label}

@@ -144,8 +144,23 @@ class LogTransaction extends Component {
     console.log(newSummary);
     return newSummary
   }
-  onChangeProportion = () => {
-    return true
+  onChangeProportion = (ev) => {
+    const value = ev.target.value
+    const id = ev.target.id.toString() //making this a string because right now some ids are "1" or 1. Which breaks the IF conditions below.
+    const memberSummarys = this.state.members
+    const newMemberSummarys = []
+    for (const summary of memberSummarys) {
+      const summaryID = summary.id.toString()
+      if (summaryID === id) {
+        summary.proportion = value
+        newMemberSummarys.push(summary)
+      } else {
+        newMemberSummarys.push(summary)
+      }
+    }
+    this.setState({
+      members: newMemberSummarys
+    })
   }
 
   componentDidMount () {
@@ -250,10 +265,11 @@ class LogTransaction extends Component {
         {
           this.state.members.map(member => (
             <div>
-              <label>{member.name}'s proportion of the bill:</label>
+              <label>{member.name}'s proportion of the bill: {member.id}</label>
             <Input
               name={member.name + "'s proportion"}
               placeholder={member.name + "'s proportion"}
+              id={member.id} // Using the ID parameter for passing ID to function. Asking Michael / Maddy about best practices on this.
               value={member.proportion}
               onChange={this.onChangeProportion}
             />
