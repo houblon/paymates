@@ -24,12 +24,14 @@ class LogTransaction extends Component {
   }
   onChangePayer = (ev) => {
     this.setState({
-      payer_ID: ev.target.value,
+      // payer_ID: ev.target.value,
+      payer_ID: ev.value,
     });
   }
   onChangePayee = (ev) => {
     this.setState({
-      payee: ev.target.value,
+      // payee: ev.target.value,
+      payee: ev.value,
     });
   }
   onChangeAction = (ev) => {
@@ -40,7 +42,8 @@ class LogTransaction extends Component {
   }
   onChangeRecipient = (ev) => {
     this.setState({
-      recipient_ID: ev.target.value,
+      // recipient_ID: ev.target.value,
+      recipient_ID: ev.value,
     });
   }
   onChangeAmount = (ev) => {
@@ -167,48 +170,60 @@ class LogTransaction extends Component {
         />
         <br />
         <h2>Who Paid: {this.state.payer_ID}</h2>
-        {
-          this.state.members.map(member => (
-            <Button
-              onClick={this.onChangePayer}
-              value={member.id}
-              label={member.name}
-            />
-          ))
-        }
-        <br />
-        <h2>Action type: {this.state.action}</h2>
         <SelectList
           data={
-            [
+            this.state.members.map(member => (
               {
-                name: "bill",
-                label: "Paid Bill",
-                value: "bill",
-              },
-              {
-                name: "reimbursement",
-                label: "Paid Back",
-                value: "reimbursement",
+                value: member.id,
+                label: member.name
               }
-            ]
+            ))
           }
-          name='name'
-          onChange={this.onChangeAction}
+          name='payer'
+          onChange={this.onChangePayer}
           textField='label'
-          value={this.state.action}
+          value={this.state.payer_ID}
           valueField='value'
         />
+        <br />
+        <h2>Action type: {this.state.action}</h2>
+          <SelectList
+            data={
+              [
+                {
+                  name: "bill",
+                  label: "Paid Bill",
+                  value: "bill",
+                },
+                {
+                  name: "reimbursement",
+                  label: "Paid Back",
+                  value: "reimbursement",
+                }
+              ]
+            }
+            name='action'
+            onChange={this.onChangeAction}
+            textField='label'
+            value={this.state.action}
+            valueField='value'
+          />
         <h2>Reimbursement Recipient: {this.state.recipient_ID}</h2>
-        {
-          this.state.members.map(member => (
-            <Button
-              onClick={this.onChangeRecipient}
-              value={member.id}
-              label={member.name}
-            />
-          ))
-        }
+          <SelectList
+            data={
+              this.state.members.map(member => (
+                {
+                  value: member.id,
+                  label: member.name
+                }
+              ))
+            }
+            name='recipient'
+            onChange={this.onChangeRecipient}
+            textField='label'
+            value={this.state.recipient_ID}
+            valueField='value'
+          />
         <Input
           name="Business name"
           placeholder="Paid what bill..."
