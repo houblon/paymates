@@ -1,16 +1,14 @@
-.LogTransaction input,
-.LogTransaction textarea,
-.LogTransaction button {
-  font-size: 24pt;
-  background: none;
-  /* color: white; */
-  padding: 10px;
-  width: 100%;
-  display: block;
-  border: 2px solid white;
+/* React Widget list */
+.rw-list {
+  padding: 0;
 }
 
-.LogTransaction button {
-  color: black;
-  background: #61dafb;
+/* React Widget list item */
+.rw-list-option {
+  list-style-type: none;
+}
+
+/* React Widget radio button */
+.rw-select-list-input {
+  margin-right: 8px;
 }
