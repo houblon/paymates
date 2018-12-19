@@ -235,7 +235,7 @@ equalize = (obj) => {
         <h2>Balances:</h2>
         {
           this.state.members.map(memberSummary => (
-            <div>{memberSummary.name} - {memberSummary.balance}</div>
+            <div>{memberSummary.name}: {memberSummary.balance > 0 ? "+" + memberSummary.balance: memberSummary.balance}</div>
           ))
         }
       </div>

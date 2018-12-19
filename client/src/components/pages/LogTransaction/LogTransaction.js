@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import './LogTransaction.css';
 import Button from '../../Button/Button.js';
 import Input from '../../Input/Input.js';
+import SelectList from 'react-widgets/lib/SelectList';
 
 class LogTransaction extends Component {
   state = {
-    date: '',
+    transactionDate: '',
     payer_ID: '',
     payee: '',
     action: '',
@@ -18,7 +19,7 @@ class LogTransaction extends Component {
 
   onChangeTransactionDate = (ev) => {
     this.setState({
-      date: ev.target.value,
+      transactionDate: ev.target.value,
     });
   }
   onChangePayer = (ev) => {
@@ -33,7 +34,8 @@ class LogTransaction extends Component {
   }
   onChangeAction = (ev) => {
     this.setState({
-      action: ev.target.value,
+      // action: ev.target.value,
+      action: ev.value,
     });
   }
   onChangeRecipient = (ev) => {
@@ -87,19 +89,19 @@ class LogTransaction extends Component {
     return formData
   }
   submit = () => {
-  const id = this.props.match.params.id;
-    // THIS IS WHERE THE UPDATE FUNCTION NEEDS TO GO!!!
-    fetch(`/api/households/${id}`, { // this route need to change
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(this.buildFormData()),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Got this back', data);
-        // Redirect to homepage
-        // this.props.history.push('/');
-      });
+    const id = this.props.match.params.id;
+      // THIS IS WHERE THE UPDATE FUNCTION NEEDS TO GO!!!
+      fetch(`/api/households/${id}`, { // this route need to change
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(this.buildFormData()),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Got this back', data);
+          // Redirect to homepage
+          // this.props.history.push('/');
+        });
   }
   setDefaultProportions = (membersSummary) => {
     console.log(membersSummary);
@@ -141,11 +143,11 @@ class LogTransaction extends Component {
       <div className="LogTransaction">
         <h1>Log a new transaction</h1>
         <Input
-            name="Transaction date"
-            placeholder="Enter transaction date"
-            value={this.state.transactionDate}
-            onChange={this.onChangeTransactionDate}
-          />
+          name="Transaction date"
+          placeholder="Enter transaction date"
+          value={this.state.transactionDate}
+          onChange={this.onChangeTransactionDate}
+        />
         <br />
         <h2>Who Paid: {this.state.payer_ID}</h2>
         {
@@ -159,8 +161,27 @@ class LogTransaction extends Component {
         }
         <br />
         <h2>Action type: {this.state.action}</h2>
-        <button onClick={this.onChangeAction} value="bill">Paid Bill</button>
-        <button onClick={this.onChangeAction} value="reimbursement">Paid Back</button>
+        <SelectList
+          data={
+            [
+              {
+                name: "bill",
+                label: "Paid Bill",
+                value: "bill",
+              },
+              {
+                name: "reimbursement",
+                label: "Paid Back",
+                value: "reimbursement",
+              }
+            ]
+          }
+          name='name'
+          onChange={this.onChangeAction}
+          textField='label'
+          value={this.state.action}
+          valueField='value'
+        />
         <h2>Reimbursement Recipient: {this.state.recipient_ID}</h2>
         {
           this.state.members.map(member => (
@@ -172,22 +193,22 @@ class LogTransaction extends Component {
           ))
         }
         <Input
-            name="Business name"
-            placeholder="Paid what bill..."
-            value={this.state.payee}
-            onChange={this.onChangePayee}
-          />
+          name="Business name"
+          placeholder="Paid what bill..."
+          value={this.state.payee}
+          onChange={this.onChangePayee}
+        />
         <br />
         <Input
-            name="Amount"
-            placeholder="Amount"
-            value={this.state.amount}
-            onChange={this.onChangeAmount}
-          />
+          name="Amount"
+          placeholder="Amount"
+          value={this.state.amount}
+          onChange={this.onChangeAmount}
+        />
         <Button
           onClick={this.submit}
           label="Add transaction"
-          />
+        />
       </div>
     );
   }
