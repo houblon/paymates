@@ -21,3 +21,27 @@
 .rw-select-list-input {
   margin-right: 8px;
 }
+
+/* ReactJS Datepicker */
+.transaction-date .react-datepicker__input-container {
+  width: 100%;
+}
+
+.react-datepicker__input {
+  border: 2px solid #ccc;
+  border-radius: 7px;
+  color: #000;
+  font-size: 30px;
+  font-weight: bold;
+  margin: 10px 0;
+  padding: 0 5px;
+  width: 100%;
+}
+
+.react-datepicker__input::placeholder {
+  color: #AAA;
+}
+
+.react-datepicker__input.error {
+  border-color: #ff0000;  
+}
