@@ -51,12 +51,6 @@ class LogTransaction extends Component {
       amount: ev.target.value,
     });
   }
-  // TEMPORARILY ANTIQUATED
-  // onChangeProportions = (ev) => {
-  //   this.setState({
-  //     proportions: ev.target.value,
-  //   });
-  // }
   buildFormData = () => {
     let formData = {}
     if (this.state.action === "bill") {
@@ -137,6 +131,22 @@ class LogTransaction extends Component {
     }
     return defaultProportions
   }
+  setProportions = (membersSummary) => {
+    console.log(membersSummary);
+    let newSummary = []
+    let memberCount = membersSummary.length
+    for (const summary of membersSummary) {
+      //console.log(summary);
+      summary.proportion = Number(1/memberCount)
+      //console.log(memberProportion);
+      newSummary.push(summary)
+    }
+    console.log(newSummary);
+    return newSummary
+  }
+  onChangeProportion = () => {
+    return true
+  }
 
   componentDidMount () {
     // const currentURL = window.location.href
@@ -152,7 +162,7 @@ class LogTransaction extends Component {
           rawData: data,
           householdID: data[0]._id,
           householdName: data[0].name,
-          members: data[0].members,
+          members: this.setProportions(data[0].members),
           proportions: this.setDefaultProportions(data[0].members)
         })
       })
@@ -237,6 +247,19 @@ class LogTransaction extends Component {
           value={this.state.amount}
           onChange={this.onChangeAmount}
         />
+        {
+          this.state.members.map(member => (
+            <div>
+              <label>{member.name}'s proportion of the bill:</label>
+            <Input
+              name={member.name + "'s proportion"}
+              placeholder={member.name + "'s proportion"}
+              value={member.proportion}
+              onChange={this.onChangeProportion}
+            />
+            </div>
+          ))
+        }
         <Button
           onClick={this.submit}
           label="Add transaction"
