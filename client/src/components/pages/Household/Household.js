@@ -51,7 +51,7 @@ class Household extends Component {
         for (const proportion of transaction.proportions) {
           //.hasOwnProperty(memberID)) {
             if (proportion.member_ID === member) {
-            total += (Number(transaction.amount) * Number(proportion.proportion))
+            total += (Number(transaction.amount) * (Number(proportion.proportion)*.01))
         }
         }
       }
