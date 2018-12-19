@@ -5,11 +5,14 @@ import Input from '../../Input/Input.js';
 import SelectList from 'react-widgets/lib/SelectList';
 import { Link } from 'react-router-dom'
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 class LogTransaction extends Component {
   state = {
     reimbursementShowBool: 'hide',
     billShowBool: 'hide',
-    transactionDate: '',
+    // transactionDate: '',
     payer_ID: '',
     payee: '',
     action: '',
@@ -17,14 +20,22 @@ class LogTransaction extends Component {
     amount: '',
     currency: 'USD',
     proportions: [],
-    members: []
+    members: [],
   }
 
-  onChangeTransactionDate = (ev) => {
+  onPickDate = (date) => {
+    const uts = new Date(date).getTime() / 1000;
     this.setState({
-      transactionDate: ev.target.value,
+      // pickedDate: new Date('2018.12.23'),
+      pickedDate: date,
+      pickedDateUTS: uts,
     });
   }
+  // onChangeTransactionDate = (ev) => {
+  //   this.setState({
+  //     transactionDate: ev.target.value,
+  //   });
+  // }
   onChangePayer = (ev) => {
     this.setState({
       payer_ID: ev.value,
@@ -65,36 +76,58 @@ class LogTransaction extends Component {
     });
   }
   buildFormData = () => {
-    let formData = {}
-    if (this.state.action === "bill") {
-      formData = {
-      date: this.state.transactionDate,
+    let formData = {
+      date: this.state.pickedDateUTS,
       payer_ID: this.state.payer_ID,
-      payee: this.state.payee,
       action: this.state.action,
       amount: this.state.amount,
       currency: this.state.currency,
-      proportions: this.state.proportions
     }
-    // console.log("Its a bill");
-    // console.log("Inside bill formData: ");
-    // console.log(formData);
-    
-    } else if (this.state.action === "reimbursement") {
-      formData = {
-      date: this.state.transactionDate,
-      payer_ID: this.state.payer_ID,
-      action: this.state.action,
-      recipient_ID: this.state.recipient_ID,
-      amount: this.state.amount,
-      currency: this.state.currency
+
+    if (this.state.action === "bill") {
+      formData.payee = this.state.payee;
+      formData.proportions = this.state.proportions;
+      console.log("Its a bill");
+      console.log("Inside bill formData:", formData);
     }
-    // console.log("Its a reimbursement");
-    // console.log("Inside reim formData: ");
+
+    if (this.state.action === "reimbursement") {
+      formData.recipient_ID = this.state.recipient_ID;
+      console.log("Its a reimbursement");
+      console.log("Inside reim formData:", formData);
+    }
+
+
+    // if (this.state.action === "bill") {
+    //     formData = {
+    //     date: this.state.transactionDate,
+    //     date: this.state.pickedDateUTS,
+    //     payer_ID: this.state.payer_ID,
+    //     payee: this.state.payee,
+    //     action: this.state.action,
+    //     amount: this.state.amount,
+    //     currency: this.state.currency,
+    //     proportions: this.state.proportions
+    //   }
+    //   console.log("Its a bill");
+    //   console.log("Inside bill formData: ");
+    //   console.log(formData);
+    // } else if (this.state.action === "reimbursement") {
+    //     formData = {
+    //     date: this.state.transactionDate,
+    //     date: this.state.pickedDateUTS,
+    //     payer_ID: this.state.payer_ID,
+    //     action: this.state.action,
+    //     recipient_ID: this.state.recipient_ID,
+    //     amount: this.state.amount,
+    //     currency: this.state.currency
+    //   }
+    //   console.log("Its a reimbursement");
+    //   console.log("Inside reim formData: ");
+    //   console.log(formData);
+    // }
+    console.log("Built formData");
     // console.log(formData);
-  }
-    console.log("Sent formData:");
-    console.log(formData);
     
     return formData
   }
@@ -119,7 +152,7 @@ class LogTransaction extends Component {
             })
               .then(response => response.json())
               .then(data => {
-                console.log('Got this back', data);
+                console.log('Sent form data. Got this back', data);
                 // Redirect to homepage
                 // this.props.history.push('/');
               });
@@ -201,13 +234,13 @@ class LogTransaction extends Component {
       <div className="LogTransaction">
         <h1>Log a new transaction</h1>
         <h3><Link to={"/household/" + this.state.householdID}>Back to Household report</Link></h3>
-        <div className=''>
-        <Input
-          name="Transaction date"
-          placeholder="Enter transaction date"
-          value={this.state.transactionDate}
-          onChange={this.onChangeTransactionDate}
-        />
+        <div className='transaction-date'>
+          <DatePicker
+            placeholderText="Enter transaction date"
+            selected={this.state.pickedDate}
+            onChange={this.onPickDate}
+            className="react-datepicker__input"
+          />
         </div>
         <div className=''>
           <h2>Who Paid: {this.state.payer_ID}</h2>
@@ -310,6 +343,7 @@ class LogTransaction extends Component {
         </div>
         <div className=''>
           <Button
+            className='submit_on_white'
             onClick={this.submit}
             label="Add transaction"
           />
