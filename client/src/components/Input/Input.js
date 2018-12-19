@@ -9,6 +9,9 @@ const Input = (props) => (
     value={props.value}
     id={props.id} // Using the ID parameter for passing ID to function. Asking Michael / Maddy about best practices on this.
     onChange={props.onChange}
+    step={props.step}
+    max={props.max}
+    min={props.min}
   >
     {props.label}
   </input>

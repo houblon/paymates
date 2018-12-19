@@ -21,6 +21,7 @@ class LogTransaction extends Component {
     currency: 'USD',
     proportions: [],
     members: [],
+    valid_Proportions: true
   }
 
   onPickDate = (date) => {
@@ -207,8 +208,43 @@ class LogTransaction extends Component {
     this.setState({
       members: newMemberSummarys
     })
+    this.checkProportions()
   }
 
+  sumProportions = () => {
+    const membersSummary = this.state.members
+    let proportionsSum = 0
+    for (const summary of membersSummary) {
+      proportionsSum += Number(summary.proportion)
+      //console.log(proportionsSum);
+    }
+    return proportionsSum
+  }
+  checkProportions = () => {
+    const proportionsSum = this.sumProportions()
+    //console.log(proportionsSum);
+    if (proportionsSum === 1) {
+      //console.log("proportions sum is exactly 100%" + proportionsSum);
+      this.setState({
+        valid_Proportions: true
+      })
+    } else if (proportionsSum < 1 && proportionsSum >= .999) {
+      //console.log("proportions sum is .999 or better" + proportionsSum);
+      this.setState({
+        valid_Proportions: true
+      })
+    } else {
+      this.setState({
+        valid_Proportions: false
+      })
+    } 
+  }
+  resetProportions = () => {
+    const newSummary = this.setProportions(this.state.members)
+    this.setState({
+      members: newSummary
+    })
+  }
   componentDidMount () {
     // const currentURL = window.location.href
     // let result = currentURL.substring(currentURL.lastIndexOf("/") + 1);
@@ -336,9 +372,23 @@ class LogTransaction extends Component {
               id={member.id} // Using the ID parameter for passing ID to function. Asking Michael / Maddy about best practices on this.
               value={member.proportion}
               onChange={this.onChangeProportion}
+              type="number"
+              step=".01"
+              max="1"
+              min="0"
             />
             </div>
           ))
+        }
+        {
+          this.state.valid_Proportions ? null :
+          <div className="transaction-alert">
+            <p>The proportions do not add up to 100%. Please correct.</p>
+            <Button
+              onClick={this.resetProportions}
+              label="Reset proportions"
+            />
+          </div>
         }
         </div>
         <div className=''>
