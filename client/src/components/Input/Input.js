@@ -11,6 +11,7 @@ const Input = (props) => (
     onChange={props.onChange}
     step={props.step}
     max={props.max}
+    min={props.min}
   >
     {props.label}
   </input>

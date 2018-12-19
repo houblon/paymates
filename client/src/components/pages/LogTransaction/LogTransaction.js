@@ -183,21 +183,20 @@ class LogTransaction extends Component {
     let proportionsSum = 0
     for (const summary of membersSummary) {
       proportionsSum += Number(summary.proportion)
-      console.log(proportionsSum);
-      
+      //console.log(proportionsSum);
     }
     return proportionsSum
   }
   checkProportions = () => {
     const proportionsSum = this.sumProportions()
-    console.log(proportionsSum);
+    //console.log(proportionsSum);
     if (proportionsSum === 1) {
-      console.log("proportions sum is exactly 100%" + proportionsSum);
+      //console.log("proportions sum is exactly 100%" + proportionsSum);
       this.setState({
         valid_Proportions: true
       })
-    } else if (proportionsSum < 1 && proportionsSum >= .99) {
-      console.log("proportions sum is .99 or better" + proportionsSum);
+    } else if (proportionsSum < 1 && proportionsSum >= .999) {
+      //console.log("proportions sum is .999 or better" + proportionsSum);
       this.setState({
         valid_Proportions: true
       })
@@ -343,6 +342,7 @@ class LogTransaction extends Component {
               type="number"
               step=".01"
               max="1"
+              min="0"
             />
             </div>
           ))
