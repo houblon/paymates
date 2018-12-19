@@ -181,20 +181,28 @@ class CreateHousehold extends Component {
               value={member.name}
               onChange={this.onMemberNameChange(index)}
             />
-            {/* <button type="button" onClick={this.onRemoveMember(index)} className="small">-</button> */}
+            {/* <Button type="button" onClick={this.onRemoveMember(index)} className="button submit_on_white">-</Button> */}
           </div>
         ))}
-        <button type="button" onClick={this.onAddMember} className="small">Add Another Member</button>
+          <Button 
+            type="button" 
+            onClick={this.onAddMember} 
+            className="button submit_on_white"
+            label="Add Another Member"
+          />
 
-
+          <br />
           <br />
           <Button onClick={this.submit}
             label="Add household"
+            className="submit_on_white button"
           />
+          <br />
           <br />
           <Button onClick={() => this.mongoHouseholdsTest('households', '5c146f11e5fada39ca922968')}
             label="GET Test household"
           />
+          <br />
           <br />
           <Button onClick={() => this.mongoHouseholdsTest('households', '5c14196288ab5128ca0a5564')}
             label="GET Alice and Bob's House household"
