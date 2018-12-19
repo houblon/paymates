@@ -172,8 +172,8 @@ class LogTransaction extends Component {
       const memberProportion = {}
       //console.log(summary);
       memberProportion.member_ID = summary.id
-      memberProportion.proportion = Number(1/memberCount)
-      //console.log(memberProportion);
+      memberProportion.proportion = this.roundToOneDecimalPlace(Number(100/memberCount))
+      console.log(memberProportion);
       defaultProportions.push(memberProportion)
     }
     return defaultProportions
@@ -184,12 +184,15 @@ class LogTransaction extends Component {
     let memberCount = membersSummary.length
     for (const summary of membersSummary) {
       //console.log(summary);
-      summary.proportion = Number(1/memberCount)
+      summary.proportion = this.roundToOneDecimalPlace(Number(100/memberCount))
       //console.log(memberProportion);
       newSummary.push(summary)
     }
     console.log(newSummary);
     return newSummary
+  }
+  roundToOneDecimalPlace = (num) => {
+    return Math.round(num * 10) / 10;
   }
   onChangeProportion = (ev) => {
     const value = ev.target.value
@@ -223,13 +226,13 @@ class LogTransaction extends Component {
   checkProportions = () => {
     const proportionsSum = this.sumProportions()
     //console.log(proportionsSum);
-    if (proportionsSum === 1) {
-      //console.log("proportions sum is exactly 100%" + proportionsSum);
+    if (proportionsSum === 100) {
+      console.log("proportions sum is exactly 100%" + proportionsSum);
       this.setState({
         valid_Proportions: true
       })
-    } else if (proportionsSum < 1 && proportionsSum >= .999) {
-      //console.log("proportions sum is .999 or better" + proportionsSum);
+    } else if (proportionsSum < 100 && proportionsSum >= 99.9) {
+      console.log("proportions sum is 99.9% or better" + proportionsSum);
       this.setState({
         valid_Proportions: true
       })
@@ -370,11 +373,11 @@ class LogTransaction extends Component {
               name={member.name + "'s proportion"}
               placeholder={member.name + "'s proportion"}
               id={member.id} // Using the ID parameter for passing ID to function. Asking Michael / Maddy about best practices on this.
-              value={member.proportion}
+              value={member.proportion} // How do I add a '%' sign after the value without breaking validation?
               onChange={this.onChangeProportion}
               type="number"
-              step=".01"
-              max="1"
+              step=".1"
+              max="100"
               min="0"
             />
             </div>
