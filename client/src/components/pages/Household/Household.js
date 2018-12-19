@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import './Household.css';
 
 class Household extends Component {
@@ -6,7 +7,6 @@ class Household extends Component {
     members: [],
     recomendations: [],
     transactions: [],
-    // memberBalances: [],
   }
   transformTransactions = (data) => {
     const arr = []
@@ -188,7 +188,8 @@ equalize = (obj) => {
 ///
   render() {
     return (
-      <div className="Household-Report">
+      this.state.householdID ? 
+        <div className="Household-Report">
         <h1>Household Report</h1>
         <h2>Household Name: {this.state.householdName}</h2>
         <h2>Household ID: {this.state.householdID}</h2>
@@ -238,6 +239,13 @@ equalize = (obj) => {
             <div>{memberSummary.name} - {memberSummary.balance}</div>
           ))
         }
+      </div>
+      : <div>
+          <h1>uh-oh...</h1>
+          <h2>The household with id "{this.props.match.params.id}" was not found.</h2>
+          <p>Are you sure you have the correct url?</p>
+          <p><Link to="/find-household/">Find your Household</Link></p>
+          <p><Link to="/create-household/">Create a Household</Link></p>
       </div>
     );
   }
