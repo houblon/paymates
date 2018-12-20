@@ -35,7 +35,6 @@
   background-color: #4FC3F7;
   border: solid 2px #282c34;
   border-radius: 15px;
-  box-shadow: 0 9px #282c34;
   color: #282c34;
   padding: 15px 25px;
 }
@@ -48,7 +47,6 @@
 
 .submit_on_white:active {
   background-color: #4FC3F7;
-  box-shadow: 0 5px #282c34;
   color: #282c34;
   transform: translateY(4px);
 }
