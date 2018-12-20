@@ -10,11 +10,15 @@ class CreateHousehold extends Component {
     householdMembers: [
       {
         id: 1,
-        name: '',
+        name: 'Manny',
       },
       {
         id: 2,
-        name: '',
+        name: 'Moe',
+      },
+      {
+        id: 3,
+        name: 'Jack',
       }
     ],
     defaultCurrency: 'USD',
@@ -67,6 +71,10 @@ class CreateHousehold extends Component {
     //   // Redirect to blog
     //   // this.props.history.push('/');
     // });
+  }
+
+  onRemoveMember = (idx) => () => {
+    this.setState({ householdMembers: this.state.householdMembers.filter((s, sidx) => idx !== sidx) });
   }
 
   onChangeDefaultCurrency = (ev) => {
@@ -146,11 +154,12 @@ class CreateHousehold extends Component {
       <div className="Create-Household">
         <h1>Create a new household</h1>
         <Input
-            name="Household Name"
-            placeholder="Enter your household name"
-            value={this.state.householdName}
-            onChange={this.onChangeHouseholdName}
-          />
+          className='household-input'
+          name="Household Name"
+          placeholder="Enter your household name"
+          value={this.state.householdName}
+          onChange={this.onChangeHouseholdName}
+        />
         {/* <br />
         <Input
             name="Household Members"
@@ -170,7 +179,8 @@ class CreateHousehold extends Component {
         {this.state.householdMembers.map((member, index) => (
           <div className="member" key={String(index)}>
             <Input
-              type="text"
+              className='household-input member-input'
+              type='text'
               name={'member_' + String(index + 1)}
               placeholder={
                 member.errorMessage ? (
@@ -182,21 +192,34 @@ class CreateHousehold extends Component {
               value={member.name}
               onChange={this.onMemberNameChange(index)}
             />
+            {
+              // index > 1 ? (
+              this.state.householdMembers.length > 2 ? (
+                <Button
+                  className='round_remove'
+                  onClick={this.onRemoveMember(index)}
+                  label='–'
+                />
+              ) : (null)
+            }
+            
             {/* <Button type="button" onClick={this.onRemoveMember(index)} className="button submit_on_white">-</Button> */}
           </div>
         ))}
           <Button 
             type="button" 
             onClick={this.onAddMember} 
-            className="button submit_on_white"
-            label="Add Another Member"
-          />
+            // className="submit_on_white"
+            className="round_add member-add"
+            // label="Add Another Member"
+            label="+"
+          />Add Another Member
 
           <br />
           <br />
           <Button onClick={this.submit}
             label="Add household"
-            className="submit_on_white button"
+            className="submit_on_white"
           />
           <br />
           <br />

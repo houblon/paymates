@@ -90,15 +90,21 @@
 
 .round_add, .round_remove { /* on white background */
   background-color: #fff;
-  border: #4169E0;
+  border: 2px solid #4169E0;
   border-radius: 50%;
   color: #4169E0;
   cursor: pointer;
   display: inline-block;
-  font-size: 16px;
-  padding: 20px;
+  /* font-size: 16px; */
+  font-weight: bold;
+  height: 32px;
+  margin: 10px 0;
+  min-width: 32px;
+  /* padding: 20px; */
+  padding: 0;
   text-align: center;
   text-decoration: none;
+  width: 32px;
 
 }
 

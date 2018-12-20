@@ -1,3 +1,19 @@
 .Create-Household {
   margin: 1rem;
 }
+
+.member {
+  display: flex;
+}
+
+.Input.household-input {
+  max-width: 500px;
+}
+
+.Input.member-input {
+  margin-right: 10px;
+}
+
+.member-add {
+  margin-right: 10px;
+}
