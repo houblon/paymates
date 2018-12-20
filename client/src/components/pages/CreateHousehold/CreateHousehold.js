@@ -152,7 +152,7 @@ class CreateHousehold extends Component {
         <Input
           className='household-input'
           name="Household Name"
-          placeholder="Enter your household name"
+          placeholder="Household name"
           value={this.state.householdName}
           onChange={this.onChangeHouseholdName}
         />
