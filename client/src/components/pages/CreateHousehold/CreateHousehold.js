@@ -83,7 +83,8 @@ class CreateHousehold extends Component {
     const formData = {
       name: this.state.householdName,
       members: this.state.householdMembers,
-      defaultCurrency: this.state.defaultCurrency
+      defaultCurrency: this.state.defaultCurrency,
+      transactions: []
     };
 
     let emptyMemberNameField = false;
