@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import './Household.css';
+import Button from '../../Button/Button';
 
 class Household extends Component {
   state = {
@@ -183,14 +184,21 @@ class Household extends Component {
         <h1>Household Report</h1>
         <h2>Household Name: {this.state.householdName}</h2>
         <h2>Household ID: {this.state.householdID}</h2>
-        <h3><Link to={"/household/" + this.state.householdID + "/log-transaction"}>Log a transaction</Link></h3>
+        <h3>
+          <Link to={"/household/" + this.state.householdID + "/log-transaction"}>
+            <Button
+              label="Log a New Transaction"
+              className="submit_on_white"
+            />
+          </Link>
+        </h3>
         <h2>Members:</h2>
         {
           this.state.members.map(member => (
             <span> Name: {member.name}, ID: {member.id}.</span>
           ))
         }
-        <h2>Recomendations:</h2>
+        <h2>Recommendations:</h2>
         {
           this.state.recomendations.map(rec => (
             <p>{rec}</p>
@@ -234,10 +242,24 @@ class Household extends Component {
       : <div>
           <h1>uh-oh...</h1>
           <h2>The household with id "{this.props.match.params.id}" was not found.</h2>
-          <p>Are you sure you have the correct url?</p>
-          <p><Link to="/find-household/">Find your Household</Link></p>
-          <p><Link to="/create-household/">Create a Household</Link></p>
-      </div>
+            <p>Are you sure you have the correct url?</p>
+            <p>
+              <Link to="/find-household/">
+                <Button
+                  label="Find your Household"
+                  className="submit_on_white"
+                />
+              </Link>
+            </p>
+            <p>
+              <Link to="/create-household/">
+                <Button
+                  label="Create a Household"
+                  className="submit_on_white"
+                />
+              </Link>
+            </p>
+        </div>
     );
   }
 }

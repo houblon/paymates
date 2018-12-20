@@ -271,8 +271,15 @@ class LogTransaction extends Component {
   render() {
     return (
       <div className="LogTransaction">
-        <h1>Log a new transaction</h1>
-        <h3><Link to={"/household/" + this.state.householdID}>Back to Household report</Link></h3>
+        <h1>Log a New Transaction</h1>
+        <h3>
+          <Link to={"/household/" + this.state.householdID}>
+            <Button
+              label="Back to Household Report"
+              className="submit_on_white"
+            />
+          </Link>
+        </h3>
         <div className='transaction-date'>
           <DatePicker
             placeholderText="Enter transaction date"
@@ -388,17 +395,18 @@ class LogTransaction extends Component {
           <div className="transaction-alert">
             <p>The proportions do not add up to 100%. Please correct.</p>
             <Button
+              className="submit_on_white"
               onClick={this.resetProportions}
-              label="Reset proportions"
+              label="Reset Proportions"
             />
           </div>
         }
         </div>
         <div className=''>
           <Button
-            className='submit_on_white'
+            className="submit_on_white"
             onClick={this.submit}
-            label="Add transaction"
+            label="Add This Transaction"
           />
         </div>
       </div>
