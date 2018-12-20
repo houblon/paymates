@@ -89,7 +89,7 @@ class Household extends Component {
       this.sumReimbursementsSent(member.id) -
       this.sumReimbursementsReceived(member.id);
       const roundedBalance = this.roundToTwoDecimalPlaces(balance);
-      console.log(member.name + " : " + this.sumAllBillsPaidByMember(member.id) + " - " + this.sumProportionsOwed(member.id) + " + " + this.sumReimbursementsSent(member.id) + " - " + this.sumReimbursementsReceived(member.id) + " = " + roundedBalance)
+      //console.log(member.name + " : " + this.sumAllBillsPaidByMember(member.id) + " - " + this.sumProportionsOwed(member.id) + " + " + this.sumReimbursementsSent(member.id) + " - " + this.sumReimbursementsReceived(member.id) + " = " + roundedBalance)
       member.balance = roundedBalance
     }
     return membersSummary
@@ -111,78 +111,71 @@ class Household extends Component {
             members: this.calculateMemberBalance(data[0].members),
           }, () => {
             this.setState({
-              recomendations: this.equalize(this.state.members)
+              recomendations: this.recomendations(this.state.members)
             })
           })
         })
       });
   }
   sortBalances = (arr) => {
-  console.log(arr);
-  arr.sort(function (a, b) {
+  return arr.sort(function (a, b) {
     return a[1] - b[1];
   })
   }
-  countNeededLoops = (arr) => {
-  let loopCount = 0
-  let count = 0
-  if (arr.length === 2) {
-    return 1
-  } else {
-    while (count < arr.length) {
-      //console.log(arr[count]);
-      if (Math.abs(arr[count][1]) > this.state.members.length*.01) {
-        //console.log(Math.abs(arr[count][1]) + " is greater than " + this.state.members.length*.01);
-        loopCount++
+ 
+  recomendations = (memberSummarys) => {
+    let builtArr = []
+    for (const summary of memberSummarys) {
+      let summaryArr = []
+      if (Math.abs(summary.balance) > (memberSummarys.length*.01)) {
+        summaryArr.push(summary.id.toString(), Number(summary.balance), summary.name)
+        builtArr.push(summaryArr)
       }
+    }
+    //console.log(builtArr);
+    let arr = this.sortBalances(builtArr)
+    return this.equalize(arr)
+  }
+  equalize = (arr) => {
+    //console.log(arr);
+    let recomendations = []
+    let loopCount = arr.length-1
+    let count = 0
+    while (count < loopCount) {
+      //console.log(arr);
       count++
+      if (Math.abs(arr[0][1]) <= arr[arr.length-1][1]) {
+        console.log('Less than');
+        console.log(arr);
+        recomendations.push(arr[0][2] + " should pay " + arr[arr.length-1][2] + " $" + Math.abs(arr[0][1]) + ".")
+        arr[arr.length-1][1] = arr[arr.length-1][1]-Math.abs(arr[0][1])
+        arr[0][1] = 0
+        arr = this.buildNextArr(arr)
+      } else if (Math.abs(arr[0][1]) >= arr[arr.length-1][1]) {
+        console.log('Greater than');
+        console.log(arr);
+        recomendations.push(arr[0][2] + " should pay " + arr[arr.length-1][2] + " $" + arr[arr.length-1][1] + ".")
+        arr[arr.length-1][1] = 0
+        arr[0][1] = arr[0][1] + arr[arr.length-1][1]
+        arr = this.buildNextArr(arr)
+      }
     }
-  }
-  // console.log(loopCount);
-  return loopCount
-  }
-  equalize = (obj) => {
-  let recomendations = []
-  let arr = []
-  for (const summary of obj) {
-    let summaryArr = []
-    if (Math.abs(summary.balance) > (obj.length*.01)) {
-      summaryArr.push(summary.id, summary.balance, summary.name)
-    }
-    arr.push(summaryArr)
-  }
-  let loopCount = this.countNeededLoops(arr)
-  console.log(loopCount);
-  this.sortBalances(arr)
-  let count = 0
-  while (count < loopCount) {
-    if (Math.abs(arr[0][1]) <= arr[arr.length-1][1]) {
-      recomendations.push(arr[0][2] + " should pay " + arr[arr.length-1][2] + " $" + Math.abs(arr[0][1]) + ".")
-      arr[arr.length-1][1] = (arr[arr.length-1][1]-Math.abs(arr[0][1]))
-      arr.splice(0, 1)
-      this.sortBalances(arr)
-    } else if (arr[arr.length-1][1] <= Math.abs(arr[0][1])) {
-      recomendations.push(arr[0][2] + " should pay " + arr[arr.length-1][2] + " $" + arr[arr.length-1][1] + ".")
-      arr[arr.length-1][1] = 0
-      arr.splice(arr.length-1, 1)
-      this.sortBalances(arr)
-    }
-    count++
-  }
-  if (arr.length < 3) {
-    //console.log('There are 0, 1, or 2 members that have balances other than absolute zero.')
-    //console.log('Members with balances other than absolute zero after equalization: ' + arr.length);
-    console.log(recomendations);
-    
     return recomendations
-  } else if (arr.length > 2) {
-    console.log('There is a problem. After equalizing there are at least 3 members with balances other than absolute zero.')
-    return "Hello"
+  } 
+  buildNextArr = (arr) => {
+    let nextArr = []
+    //console.log(arr);
+    for (const summary of arr) {
+      //console.log(summary[1]);
+      if (summary[1] !== 0) {
+        //console.log('not equal');
+        nextArr.push(summary)
+      }
+    }
+    //console.log(nextArr);
+    let sentArr = this.sortBalances(nextArr)
+    return sentArr
   }
-  return recomendations
-  }
-
-///
   render() {
     return (
       this.state.householdID ? 
