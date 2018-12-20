@@ -1,8 +1,8 @@
 .Button {
   background-color: #fff;
-  border: 2px solid #000000;
+  border: 2px solid #282c34;
   border-radius: 12px;
-  color: #272C33;
+  color: #282c34;
   cursor: pointer;
   display: inline-block;
   font-size: 16px;
@@ -12,51 +12,48 @@
 }
 
 /* for member and expense submit */
-.submit_on_black { /* on black background */
+.submit_on_black { /* on almost black background */
   background-color: #4FC3F7;
-  border: 2px solid #272C33;
+  border: 2px solid #282c34;
   border-radius: 12px;
-  /* box-shadow: 0 9px #999; */
-  color: #272C33;
+  color: #282c34;
 
   padding: 15px 32px;
 }
 .submit_on_black:hover {
-  background-color: #272C33;
+  background-color: #282c34;
   border: 2px solid #4FC3F7;
   color: #4FC3F7;
 }
 
 .submit_on_black:active {
-  background-color: #272C33;
-  /* box-shadow: 0 5px #666; */
+  background-color: #282c34;
   color: #fff;
-  /* transform: translateY(4px); */
 }
 
 .submit_on_white { /* on white background */
   background-color: #4FC3F7;
-  border: solid 2px #272C33;
+  border: solid 2px #282c34;
   border-radius: 15px;
-  box-shadow: 0 9px #272C33;
-  color: #272C33;
+  box-shadow: 0 9px #282c34;
+  color: #282c34;
   padding: 15px 25px;
 }
 
 .submit_on_white:hover {
-  background-color: #000;
+  background-color: #282c34;
   border-color: #666;
   color: #4FC3F7;
 }
 
 .submit_on_white:active {
   background-color: #4FC3F7;
-  box-shadow: 0 5px #272C33;
-  color: #272C33;
+  box-shadow: 0 5px #282c34;
+  color: #282c34;
   transform: translateY(4px);
 }
 
-/* place on a black background page */
+/* place on almost black background page */
 .householdpg_info {
   border-color: #4FC3F7;
   color: #4FC3F7;
@@ -75,7 +72,7 @@
   color: #fff;
 }
 
-.round_add, .round_remove { /* on black background */
+.round_add, .round_remove { /* on almost black background */
   background-color: #999;
   border: #4169E0;
   border-radius: 50%;
@@ -100,48 +97,8 @@
   height: 32px;
   margin: 10px 0;
   min-width: 32px;
-  /* padding: 20px; */
   padding: 0;
   text-align: center;
   text-decoration: none;
   width: 32px;
-
-}
-
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-  position: absolute;
-  display: inline-block;
-}
-
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  z-index: 1;
-}
-
-/* Links inside the dropdown */
-.dropdown-content a {
-  color: #000000;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-  background-color: #ddd
-}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-/* Change the background color of the dropdown button when the dropdown content is shown */
-.btn:hover, .dropdown:hover .btn  {
-  background-color: #0b7dda;
 }
