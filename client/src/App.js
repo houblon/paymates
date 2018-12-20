@@ -22,7 +22,6 @@ class App extends Component {
       <div className="Paymates-body">
         <nav className="Paymates-navigation">
           <h1 className="Paymates-title"><Link to="/">paymates</Link></h1>
-          <h2><Link to="/create-household/">Create Household</Link></h2>
         </nav>
         <div className="Paymates-mainContent">
           <Switch>
