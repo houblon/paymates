@@ -10,15 +10,11 @@ class CreateHousehold extends Component {
     householdMembers: [
       {
         id: 1,
-        name: 'Manny',
+        name: '',
       },
       {
         id: 2,
-        name: 'Moe',
-      },
-      {
-        id: 3,
-        name: 'Jack',
+        name: '',
       }
     ],
     defaultCurrency: 'USD',
@@ -193,7 +189,6 @@ class CreateHousehold extends Component {
               onChange={this.onMemberNameChange(index)}
             />
             {
-              // index > 1 ? (
               this.state.householdMembers.length > 2 ? (
                 <Button
                   className='round_remove'
@@ -202,18 +197,25 @@ class CreateHousehold extends Component {
                 />
               ) : (null)
             }
-            
-            {/* <Button type="button" onClick={this.onRemoveMember(index)} className="button submit_on_white">-</Button> */}
           </div>
         ))}
-          <Button 
-            type="button" 
-            onClick={this.onAddMember} 
-            // className="submit_on_white"
-            className="round_add member-add"
-            // label="Add Another Member"
-            label="+"
-          />Add Another Member
+          {
+            this.state.householdMembers[0].name !== '' && 
+            this.state.householdMembers[1].name !== '' ? (
+              
+              <div>
+                <Button 
+                  type="button" 
+                  onClick={this.onAddMember} 
+                  // className="submit_on_white"
+                  className="round_add member-add"
+                  // label="Add Another Member"
+                  label="+"
+                />
+                Add Another Member
+              </div>
+            ) : (null)
+          }
 
           <br />
           <br />
