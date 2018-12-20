@@ -2,7 +2,7 @@ import React from 'react';
 import './Input.css';
 
 const Input = (props) => (
-  <input className={"Input " + props.classes}
+  <input className={"Input " + props.className}
     type={props.type}
     name={props.name}
     placeholder={props.placeholder}
