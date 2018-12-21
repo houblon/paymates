@@ -6,7 +6,7 @@ import Button from '../../Button/Button';
 class LandingPage extends Component {
   render() {
     return (
-      <div className="LandingPage snow">
+      <div className="LandingPage">
         <header className="LandingPage-header snow">
             <h1>paymates is where friends stay friends... or not.</h1>
             <h2>
