@@ -181,17 +181,8 @@ class Household extends Component {
     return (
       this.state.householdID ? 
         <div className="Household-Report">
-        <h1>Household Report</h1>
-        <h2>Household Name: {this.state.householdName}</h2>
+        <h1>Household Report for {this.state.householdName}</h1>
         <h2>Household ID: {this.state.householdID}</h2>
-        <h3>
-          <Link to={"/household/" + this.state.householdID + "/log-transaction"}>
-            <Button
-              label="Log a New Transaction"
-              className="submit_on_white"
-            />
-          </Link>
-        </h3>
         <h2>Members:</h2>
         {
           this.state.members.map(member => (
@@ -204,61 +195,128 @@ class Household extends Component {
             <p>{rec}</p>
           ))
         }
+        <div className="block-level-button">
+          <Link to={"/household/" + this.state.householdID + "/log-transaction"}>
+            <Button
+              label="Log a New Transaction"
+              className="submit_on_white"
+            />
+          </Link>
+        </div>
         <h2>Transactions:</h2>
-        {
-          this.state.transactions.map(transaction => (
-            <div className="Household-Transactions">
-              <div>Transaction ID: {transaction.id}</div>
-                <div>Date: {transaction.date}</div>
-                <div>Action: {transaction.action}</div>
-                <div>Amount: {transaction.amount}</div>
-                {
-                  transaction.currency ? <div>Currency: {transaction.currency}</div> : null
-                }
-                <div>Payer: {transaction.payer_ID}</div>
-                {
-                  transaction.payee ? <div>Payee: {transaction.payee}</div> : null
-                }
-                {
-                  transaction.recipient_ID ? <div>Recipient: {transaction.recipient_ID}</div> : null
-                }
-                {
-                  transaction.proportions ? transaction.proportions.map(proportion => (
-                    <div>Proportions:
-                      <div>{proportion.member_ID} : {proportion.proportion}</div>
-                    </div>
-                  )) : null
-                }
-            </div>
-          ))
-        }
+        <div className="table-container">
+          <table className="Household-Transactions">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Action</th>
+                <th>Amount</th>
+                {/* <th>Currency</th> */}
+                <th>Payer</th>
+                <th>Payee</th>
+                <th>Recipient</th>
+                <th>Proportions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                this.state.transactions.map(transaction => (
+                  <tr>
+                    <td className="transaction-id">
+                      <div><span className="mobile">Transaction ID:</span>{transaction.id}</div>
+                    </td>
+                    <td>
+                      <div><span className="mobile">Date:</span>
+                        {
+                          (new Date(transaction.date*1000).getUTCMonth() + 1) + '/' +
+                          new Date(transaction.date*1000).getUTCDate() + '/' +
+                          new Date(transaction.date*1000).getUTCFullYear()
+                        }
+                      </div>
+                    </td>
+                    <td>
+                      <div><span className="mobile">Action:</span>{transaction.action}</div>
+                    </td>
+                    <td>
+                      <div><span className="mobile">Amount:</span>{transaction.amount}</div>
+                    </td>
+                    {/* {
+                      transaction.currency ? 
+                        <td>
+                          <div className="mobile">Currency:</div>
+                          <div>{transaction.currency}</div>
+                        </td>
+                        : <td className="empty"></td>
+                    } */}
+                    <td>
+                      <div><span className="mobile">Payer:</span>{transaction.payer_ID}</div>
+                    </td>
+                    {
+                      transaction.payee ? <td>
+                                            <div><span className="mobile">Payee:</span>{transaction.payee}</div>
+                                          </td> 
+                                        : <td className="empty"></td>
+                    }
+                    {
+                      transaction.recipient_ID ?  <td>
+                                                    <div><span className="mobile">Recipient:</span>{transaction.recipient_ID}</div>
+                                                  </td>
+                                                  : <td className="empty"></td>
+                    }
+                    <td>
+                      <div className="mobile">Proportions:</div>
+                      <div className={transaction.proportions ? '' : 'empty'}>
+                      {
+                        transaction.proportions ? transaction.proportions.map(proportion => (
+                          <div>{proportion.member_ID} : {proportion.proportion}</div>
+                        )) : null
+                      }
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
         <h2>Balances:</h2>
         {
           this.state.members.map(memberSummary => (
             <div>{memberSummary.name}: {memberSummary.balance > 0 ? "+" + memberSummary.balance: memberSummary.balance}</div>
           ))
         }
+
+        <div className="block-level-button">
+          <Link to={"/household/" + this.state.householdID + "/log-transaction"}>
+            <Button
+              label="Log a New Transaction"
+              className="submit_on_white"
+            />
+          </Link>
+        </div>
+
       </div>
       : <div>
           <h1>uh-oh...</h1>
           <h2>The household with id "{this.props.match.params.id}" was not found.</h2>
             <p>Are you sure you have the correct url?</p>
-            <p>
+            <div className="block-level-button">
               <Link to="/find-household/">
                 <Button
                   label="Find your Household"
                   className="submit_on_white"
                 />
               </Link>
-            </p>
-            <p>
+            </div>
+            <div className="block-level-button">
               <Link to="/create-household/">
                 <Button
                   label="Create a Household"
                   className="submit_on_white"
                 />
               </Link>
-            </p>
+            </div>
         </div>
     );
   }
