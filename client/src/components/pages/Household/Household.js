@@ -181,17 +181,8 @@ class Household extends Component {
     return (
       this.state.householdID ? 
         <div className="Household-Report">
-        <h1>Household Report</h1>
-        <h2>Household Name: {this.state.householdName}</h2>
+        <h1>Household Report for {this.state.householdName}</h1>
         <h2>Household ID: {this.state.householdID}</h2>
-        <h3>
-          <Link to={"/household/" + this.state.householdID + "/log-transaction"}>
-            <Button
-              label="Log a New Transaction"
-              className="submit_on_white"
-            />
-          </Link>
-        </h3>
         <h2>Members:</h2>
         {
           this.state.members.map(member => (
@@ -204,6 +195,14 @@ class Household extends Component {
             <p>{rec}</p>
           ))
         }
+        <div>
+          <Link to={"/household/" + this.state.householdID + "/log-transaction"}>
+            <Button
+              label="Log a New Transaction"
+              className="submit_on_white"
+            />
+          </Link>
+        </div>
         <h2>Transactions:</h2>
         <div className="table-container">
           <table className="Household-Transactions">
@@ -224,13 +223,11 @@ class Household extends Component {
               {
                 this.state.transactions.map(transaction => (
                   <tr>
-                    <td>
-                      <div className="mobile">Transaction ID:</div>
-                      <div>{transaction.id}</div>
+                    <td className="transaction-id">
+                      <div><span className="mobile">Transaction ID:</span>{transaction.id}</div>
                     </td>
                     <td>
-                      <div className="mobile">Date:</div>
-                      <div>
+                      <div><span className="mobile">Date:</span>
                         {
                           (new Date(transaction.date*1000).getUTCMonth() + 1) + '/' +
                           new Date(transaction.date*1000).getUTCDate() + '/' +
@@ -239,12 +236,10 @@ class Household extends Component {
                       </div>
                     </td>
                     <td>
-                      <div className="mobile">Action:</div>
-                      <div>{transaction.action}</div>
+                      <div><span className="mobile">Action:</span>{transaction.action}</div>
                     </td>
                     <td>
-                      <div className="mobile">Amount:</div>
-                      <div>{transaction.amount}</div>
+                      <div><span className="mobile">Amount:</span>{transaction.amount}</div>
                     </td>
                     {/* {
                       transaction.currency ? 
@@ -255,14 +250,19 @@ class Household extends Component {
                         : <td className="empty"></td>
                     } */}
                     <td>
-                      <div className="mobile">Payer:</div>
-                      <div>{transaction.payer_ID}</div>
+                      <div><span className="mobile">Payer:</span>{transaction.payer_ID}</div>
                     </td>
                     {
-                      transaction.payee ? <td><div className="mobile">Payee:</div><div>{transaction.payee}</div></td> : <td className="empty"></td>
+                      transaction.payee ? <td>
+                                            <div><span className="mobile">Payee:</span>{transaction.payee}</div>
+                                          </td> 
+                                        : <td className="empty"></td>
                     }
                     {
-                      transaction.recipient_ID ? <td><div className="mobile">Recipient:</div><div>{transaction.recipient_ID}</div></td> : <td className="empty"></td>
+                      transaction.recipient_ID ?  <td>
+                                                    <div><span className="mobile">Recipient:</span>{transaction.recipient_ID}</div>
+                                                  </td>
+                                                  : <td className="empty"></td>
                     }
                     <td>
                       <div className="mobile">Proportions:</div>
@@ -286,27 +286,37 @@ class Household extends Component {
             <div>{memberSummary.name}: {memberSummary.balance > 0 ? "+" + memberSummary.balance: memberSummary.balance}</div>
           ))
         }
+
+        <div>
+          <Link to={"/household/" + this.state.householdID + "/log-transaction"}>
+            <Button
+              label="Log a New Transaction"
+              className="submit_on_white"
+            />
+          </Link>
+        </div>
+
       </div>
       : <div>
           <h1>uh-oh...</h1>
           <h2>The household with id "{this.props.match.params.id}" was not found.</h2>
             <p>Are you sure you have the correct url?</p>
-            <p>
+            <div>
               <Link to="/find-household/">
                 <Button
                   label="Find your Household"
                   className="submit_on_white"
                 />
               </Link>
-            </p>
-            <p>
+            </div>
+            <div>
               <Link to="/create-household/">
                 <Button
                   label="Create a Household"
                   className="submit_on_white"
                 />
               </Link>
-            </p>
+            </div>
         </div>
     );
   }

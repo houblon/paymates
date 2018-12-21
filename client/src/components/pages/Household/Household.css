@@ -1,15 +1,5 @@
-.Household-Transactions, .Household-Balances {
-    /* display: flex; */
-}
-
-.Household-Transactions div, .Household-Balances div {
-  /* flex: 1; */
-  /* margin: 0 3px; */
-}
-
-
-.table-container {
-  /* overflow-x:auto; */
+.Household-Transactions td.empty {
+  display: none;
 }
 
 .Household-Transactions,
@@ -33,8 +23,35 @@
 .Household-Transactions th,
 .Household-Transactions td {
   padding: 5px;
-  border: 1px solid black;
+  border: 1px solid #aaa;
   display: block;
+}
+
+.Household-Transactions td {
+  border-bottom-width: 0;
+}
+
+.Household-Transactions td:last-child {
+  border-bottom-width: 1px;
+}
+
+.Household-Transactions tr:nth-child(even) {
+  background: #eee;
+}
+
+.Household-Transactions tr:nth-child(odd) {
+  background: #FFF;
+}
+
+.Household-Transactions td.transaction-id {
+  background: #fff;
+  border: none;
+  font-weight: 700;
+  margin-top: 20px;
+}
+
+.mobile {
+  margin-right: 5px;
 }
 
 
@@ -44,7 +61,8 @@
   }
 
   .Household-Transactions thead {
-    display: table-header-group;;
+    display: table-header-group;
+    font-weight: 700;
   }
 
   .Household-Transactions tbody {
@@ -56,8 +74,21 @@
   }
 
   .Household-Transactions th,
-  .Household-Transactions td {
+  .Household-Transactions td,
+  .Household-Transactions td.empty {
     display: table-cell;
+  }
+
+  .Household-Transactions td {
+    border-bottom-width: 1px;
+  }
+
+  .Household-Transactions td.transaction-id {
+    background: none;
+    border: 1px solid #aaa;
+    font-weight: 400;
+    margin-top: 20px;
+    margin-top: 0;
   }
 
   .mobile {
