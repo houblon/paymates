@@ -21,7 +21,30 @@ class LogTransaction extends Component {
     currency: 'USD',
     proportions: [],
     members: [],
-    valid_Proportions: true
+    valid_Proportions: true,
+    valid_Date: {
+      error_status: false,
+      errors: ["Please pick a valid date."]
+    },
+    valid_payer_ID: {
+      error_status: false,
+      errors: ["Please tell us who paid."]
+    },
+    valid_recipient_ID: {
+      error_status: null,
+      errors: []
+    },
+    valid_action: {
+      error_status: false,
+      errors: ["You're logging a transcation. Choose a bill or reimbursement."]
+    },
+    valid_amount: {
+      error_status: false,
+      errors: ["The amount can't be blank. It can be zero just not blank. Also, letters aren't numbers so no letters."]
+    },
+    showErrors: "hide",
+    currentErrors: [],
+    submitAttempted: false
   }
 
   onPickDate = (date) => {
@@ -30,17 +53,51 @@ class LogTransaction extends Component {
       // pickedDate: new Date('2018.12.23'),
       pickedDate: date,
       pickedDateUTS: uts,
+      valid_Date: {
+        error_status: true,
+        errors: []
+      }
+    }, () => {
+      if (this.state.submitAttempted === true) {
+        this.refreshErrorList()
+      }
     });
+    
   }
-  // onChangeTransactionDate = (ev) => {
-  //   this.setState({
-  //     transactionDate: ev.target.value,
-  //   });
-  // }
   onChangePayer = (ev) => {
     this.setState({
       payer_ID: ev.value,
+    }, () => {
+      this.checkPayer()
     });
+  }
+  checkPayer = () => {
+    if (this.state.payer_ID === this.state.recipient_ID) {
+      this.setState({
+        valid_payer_ID: {
+          error_status: false,
+          errors: ["The recipient and person sending the reimbursement match. No bueno. Also, you're pretty sneeky."]
+        }
+      })
+    } else if (this.state.payer_ID === "") {
+      this.setState({
+        valid_payer_ID: {
+          error_status: false,
+          errors: ["Please tell us who paid."]
+        }
+      })
+    } else {
+      this.setState({
+        valid_payer_ID: {
+          error_status: true,
+          errors: []
+        }
+      }, () => {
+        if (this.state.submitAttempted === true) {
+          this.refreshErrorList()
+        }
+      })
+    }
   }
   onChangePayee = (ev) => {
     this.setState({
@@ -50,6 +107,15 @@ class LogTransaction extends Component {
   onChangeAction = (ev) => {
     this.setState({
       action: ev.value,
+      valid_action: {
+        error_status: true,
+        errors: []
+      }
+    }, () => {
+      this.checkRecipient()
+      if (this.state.submitAttempted === true) {
+        this.refreshErrorList()
+      }
     });
 
     if (ev.value === 'bill') {
@@ -69,12 +135,76 @@ class LogTransaction extends Component {
   onChangeRecipient = (ev) => {
     this.setState({
       recipient_ID: ev.value,
+      valid_recipient_ID: {
+        error_status: null,
+        errors: []
+      }
+    }, () => {
+      this.checkRecipient()
     });
+  }
+  checkRecipient = () => {
+    if (this.state.action === "") {
+      this.setState({
+        valid_recipient_ID: {
+          error_status: null,
+          errors: []
+        }
+      })
+    } else if (this.state.recipient_ID === "" && this.state.action === "reimbursement") {
+      this.setState({
+        valid_recipient_ID: {
+          error_status: false,
+          errors: ["Please tell us who is being reimbursed."]
+        }
+      })
+    } else if (this.state.recipient_ID != "" && this.state.action === "reimbursement") {
+      console.log('hi');
+      
+      this.setState({
+        valid_recipient_ID: {
+          error_status: true,
+          errors: []
+        }
+      }, () => {
+        if (this.state.submitAttempted === true) {
+          this.refreshErrorList()
+        }
+      })
+    }
   }
   onChangeAmount = (ev) => {
     this.setState({
       amount: ev.target.value,
+    }, () => {
+      this.checkAmount()
     });
+    if (this.state.submitAttempted === true) {
+      this.refreshErrorList()
+    }
+  }
+  checkAmount = () => {
+    const val = Number(this.state.amount)
+    const type = typeof(val)
+    console.log(val);
+    console.log(Number(this.state.amount));
+    console.log(typeof(val));
+    
+    if (this.state.amount === "") {
+      this.setState({
+        valid_amount: {
+          error_status: false,
+          errors: ["The amount can't be blank. It can be zero just not blank. Also, letters aren't numbers so no letters."]
+        }
+      })
+    } else if (type) {
+      this.setState({
+        valid_amount: {
+          error_status: true,
+          errors: []
+        }
+      })
+    }
   }
   buildFormData = () => {
     let formData = {
@@ -132,41 +262,79 @@ class LogTransaction extends Component {
     
     return formData
   }
-
-  validateAmount = () => {
-    return true;
-  }      
-  
   validate = () => {
-    if (this.validateAmount /*&& this.validatesomethingelse */) {
+    if (this.state.valid_action.status === true &&
+      this.state.valid_Date.status === true &&
+      this.state.valid_payer_ID.status === true &&
+      this.state.valid_recipient_ID.status === true &&
+      this.state.valid_amount.status === true &&
+      this.state.valid_Proportions.status === true)
+      {
+        return true
+      } else {
+        return this.buildErrorList()
+      }
+  }
+  buildErrorList = () => {
+    let errorList = []
+    for (const item of Object.values(this.state)) {
+      if (item.error_status === false) {
+        console.log(item.error_status);
+        errorList.push(item.errors[0])
+      }
+    }
+    // for (const [key, value] of Object.entries(this.state)) {
+    //   if (value.error_status === false) {
+    //     console.log(value.error_status);
+    //     errorList.push([[key], value.errors[0]])
+    //   }
+    // }
+    return this.displayErrorList(errorList);
+  }
+  displayErrorList = (errorList) => {
+    if (errorList.length > 0) {
+    this.setState({
+      showErrors: "display",
+      currentErrors: errorList
+    }, () => {
+      return false
+    })
+    } else {
+      this.setState({
+        showErrors: "hide",
+        currentErrors: []
+      })
       return true
     }
   }
-  submit = () => {
-    if (this.validate() === true) { //goes through each field does all its stuff & if FALSE the fields that need the user to fix can be stored in the state.
-          const id = this.props.match.params.id;
-            // THIS IS WHERE THE UPDATE FUNCTION NEEDS TO GO!!!
-            fetch(`/api/households/${id}`, { // this route need to change
-              method: 'PUT',
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify(this.buildFormData()),
-            })
-              .then(response => response.json())
-              .then(data => {
-                console.log(data);
-                const householdID = this.state.householdID
-                const url = '/household/' + householdID
-                this.props.history.push(url);
-              });
-      } else {
-        this.renderErrors() // Pickup where this.validate left off & use what got set in state.
-      }
+  refreshErrorList = () => {
+    this.buildErrorList()
   }
-  renderErrors = () => {
-    console.log("Errors were found.");
+  submit = () => {
+    this.setState({
+      submitAttempted: true
+    }, () => {
+      if (this.validate() === true) { //goes through each field does all its stuff & if FALSE the fields that need the user to fix can be stored in the state.
+        const id = this.props.match.params.id;
+          // THIS IS WHERE THE UPDATE FUNCTION NEEDS TO GO!!!
+          fetch(`/api/households/${id}`, { // this route need to change
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(this.buildFormData()),
+          })
+            .then(response => response.json())
+            .then(data => {
+              console.log(data);
+              const householdID = this.state.householdID
+              const url = '/household/' + householdID
+              this.props.history.push(url);
+            });
+    }
+    })
+    
   }
   setDefaultProportions = (membersSummary) => {
-    console.log(membersSummary);
+    //console.log(membersSummary);
     let defaultProportions = []
     let memberCount = membersSummary.length
     for (const summary of membersSummary) {
@@ -174,13 +342,13 @@ class LogTransaction extends Component {
       //console.log(summary);
       memberProportion.member_ID = summary.id
       memberProportion.proportion = this.roundToOneDecimalPlace(Number(100/memberCount))
-      console.log(memberProportion);
+      //console.log(memberProportion);
       defaultProportions.push(memberProportion)
     }
     return defaultProportions
   }
   setProportions = (membersSummary) => {
-    console.log(membersSummary);
+    //console.log(membersSummary);
     let newSummary = []
     let memberCount = membersSummary.length
     for (const summary of membersSummary) {
@@ -189,7 +357,7 @@ class LogTransaction extends Component {
       //console.log(memberProportion);
       newSummary.push(summary)
     }
-    console.log(newSummary);
+    //console.log(newSummary);
     return newSummary
   }
   roundToOneDecimalPlace = (num) => {
@@ -214,7 +382,6 @@ class LogTransaction extends Component {
     })
     this.checkProportions()
   }
-
   sumProportions = () => {
     const membersSummary = this.state.members
     let proportionsSum = 0
@@ -255,11 +422,11 @@ class LogTransaction extends Component {
     // let result = currentURL.substring(currentURL.lastIndexOf("/") + 1);
     // console.log(result);
     const id = this.props.match.params.id;
-    console.log(id);
+    //console.log(id);
     fetch(`/api/households/${id}`)
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        //console.log(data);
         this.setState({
           rawData: data,
           householdID: data[0]._id,
@@ -269,7 +436,6 @@ class LogTransaction extends Component {
         })
       })
   }
-
   render() {
     return (
       <div className="LogTransaction">
@@ -338,7 +504,7 @@ class LogTransaction extends Component {
         </div>
         
         <div className={this.state.reimbursementShowBool}>
-          <h2>Reimbursement Recipient: {this.state.recipient_ID}</h2>
+          <h2>Reimbursement Recipient:</h2>
           {
             this.state.members.map(member => (
               member.id !== this.state.payer_ID ? (
@@ -381,6 +547,9 @@ class LogTransaction extends Component {
             placeholder="Amount"
             value={this.state.amount}
             onChange={this.onChangeAmount}
+                type="number"
+                step=".1"
+                min="0"
           />
         </div>
         <div className={this.state.billShowBool}>
@@ -415,6 +584,14 @@ class LogTransaction extends Component {
               />
             </div>
           </div>
+        }
+        </div>
+        <div className={this.state.showErrors}>
+        <h1 className="transaction-error-alert">Fix the following:</h1>
+        {
+          this.state.currentErrors.map(error => (
+            <p className="transaction-error-alert">{error}</p>
+          ))
         }
         </div>
         <div className=''>

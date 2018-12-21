@@ -127,3 +127,6 @@
   margin: 1em 0;
   padding: 0;
 }
+
+.transaction-error-alert {color:red;}
+.hide {display: none;}
