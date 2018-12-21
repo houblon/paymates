@@ -1,13 +1,10 @@
-.member {
+.input-container {
   display: flex;
 }
 
 .Input.household-input {
-  max-width: 500px;
-}
-
-.Input.member-input {
   margin-right: 10px;
+  max-width: 500px;
 }
 
 .member-add {

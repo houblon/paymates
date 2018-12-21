@@ -180,13 +180,15 @@ class CreateHousehold extends Component {
             </ul>
           ) : null
         }
-        <Input
-          className='household-input'
-          name="Household Name"
-          placeholder="Household name"
-          value={this.state.householdName}
-          onChange={this.onChangeHouseholdName}
-        />
+        <div className="input-container">
+          <Input
+            className='household-input'
+            name="Household Name"
+            placeholder="Household name"
+            value={this.state.householdName}
+            onChange={this.onChangeHouseholdName}
+          />
+        </div>
         {/* <br />
         <Input
             name="Household Members"
@@ -204,9 +206,9 @@ class CreateHousehold extends Component {
           /> */}
 
         {this.state.householdMembers.map((member, index) => (
-          <div className="member" key={String(index)}>
+          <div className="input-container" key={String(index)}>
             <Input
-              className='household-input member-input'
+              className='household-input'
               type='text'
               name={'member_' + String(index + 1)}
               placeholder={
