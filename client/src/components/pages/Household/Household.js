@@ -195,7 +195,7 @@ class Household extends Component {
             <p>{rec}</p>
           ))
         }
-        <div>
+        <div className="block-level-button">
           <Link to={"/household/" + this.state.householdID + "/log-transaction"}>
             <Button
               label="Log a New Transaction"
@@ -287,7 +287,7 @@ class Household extends Component {
           ))
         }
 
-        <div>
+        <div className="block-level-button">
           <Link to={"/household/" + this.state.householdID + "/log-transaction"}>
             <Button
               label="Log a New Transaction"
@@ -301,7 +301,7 @@ class Household extends Component {
           <h1>uh-oh...</h1>
           <h2>The household with id "{this.props.match.params.id}" was not found.</h2>
             <p>Are you sure you have the correct url?</p>
-            <div>
+            <div className="block-level-button">
               <Link to="/find-household/">
                 <Button
                   label="Find your Household"
@@ -309,7 +309,7 @@ class Household extends Component {
                 />
               </Link>
             </div>
-            <div>
+            <div className="block-level-button">
               <Link to="/create-household/">
                 <Button
                   label="Create a Household"
