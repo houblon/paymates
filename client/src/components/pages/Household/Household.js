@@ -205,33 +205,81 @@ class Household extends Component {
           ))
         }
         <h2>Transactions:</h2>
-        {
-          this.state.transactions.map(transaction => (
-            <div className="Household-Transactions">
-              <div>Transaction ID: {transaction.id}</div>
-                <div>Date: {transaction.date}</div>
-                <div>Action: {transaction.action}</div>
-                <div>Amount: {transaction.amount}</div>
-                {
-                  transaction.currency ? <div>Currency: {transaction.currency}</div> : null
-                }
-                <div>Payer: {transaction.payer_ID}</div>
-                {
-                  transaction.payee ? <div>Payee: {transaction.payee}</div> : null
-                }
-                {
-                  transaction.recipient_ID ? <div>Recipient: {transaction.recipient_ID}</div> : null
-                }
-                {
-                  transaction.proportions ? transaction.proportions.map(proportion => (
-                    <div>Proportions:
-                      <div>{proportion.member_ID} : {proportion.proportion}</div>
-                    </div>
-                  )) : null
-                }
-            </div>
-          ))
-        }
+        <div className="table-container">
+          <table className="Household-Transactions">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Action</th>
+                <th>Amount</th>
+                {/* <th>Currency</th> */}
+                <th>Payer</th>
+                <th>Payee</th>
+                <th>Recipient</th>
+                <th>Proportions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                this.state.transactions.map(transaction => (
+                  <tr>
+                    <td>
+                      <div className="mobile">Transaction ID:</div>
+                      <div>{transaction.id}</div>
+                    </td>
+                    <td>
+                      <div className="mobile">Date:</div>
+                      <div>
+                        {
+                          (new Date(transaction.date*1000).getUTCMonth() + 1) + '/' +
+                          new Date(transaction.date*1000).getUTCDate() + '/' +
+                          new Date(transaction.date*1000).getUTCFullYear()
+                        }
+                      </div>
+                    </td>
+                    <td>
+                      <div className="mobile">Action:</div>
+                      <div>{transaction.action}</div>
+                    </td>
+                    <td>
+                      <div className="mobile">Amount:</div>
+                      <div>{transaction.amount}</div>
+                    </td>
+                    {/* {
+                      transaction.currency ? 
+                        <td>
+                          <div className="mobile">Currency:</div>
+                          <div>{transaction.currency}</div>
+                        </td>
+                        : <td className="empty"></td>
+                    } */}
+                    <td>
+                      <div className="mobile">Payer:</div>
+                      <div>{transaction.payer_ID}</div>
+                    </td>
+                    {
+                      transaction.payee ? <td><div className="mobile">Payee:</div><div>{transaction.payee}</div></td> : <td className="empty"></td>
+                    }
+                    {
+                      transaction.recipient_ID ? <td><div className="mobile">Recipient:</div><div>{transaction.recipient_ID}</div></td> : <td className="empty"></td>
+                    }
+                    <td>
+                      <div className="mobile">Proportions:</div>
+                      <div className={transaction.proportions ? '' : 'empty'}>
+                      {
+                        transaction.proportions ? transaction.proportions.map(proportion => (
+                          <div>{proportion.member_ID} : {proportion.proportion}</div>
+                        )) : null
+                      }
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
         <h2>Balances:</h2>
         {
           this.state.members.map(memberSummary => (

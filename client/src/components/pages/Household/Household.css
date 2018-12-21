@@ -1,8 +1,66 @@
 .Household-Transactions, .Household-Balances {
-    display: flex;
+    /* display: flex; */
 }
 
 .Household-Transactions div, .Household-Balances div {
-  flex: 1;
-  margin: 0 3px;
+  /* flex: 1; */
+  /* margin: 0 3px; */
+}
+
+
+.table-container {
+  /* overflow-x:auto; */
+}
+
+.Household-Transactions,
+.Household-Transactions thead,
+.Household-Transactions tbody,
+.Household-Transactions tr,
+.Household-Transactions th,
+.Household-Transactions td {
+  display: block;
+}
+
+.Household-Transactions {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.Household-Transactions thead {
+  display: none;
+}
+
+.Household-Transactions th,
+.Household-Transactions td {
+  padding: 5px;
+  border: 1px solid black;
+  display: block;
+}
+
+
+@media only screen and (min-width: 600px) {
+  .Household-Transactions {
+    display: table;
+  }
+
+  .Household-Transactions thead {
+    display: table-header-group;;
+  }
+
+  .Household-Transactions tbody {
+    display: table-row-group;
+  }
+
+  .Household-Transactions tr {
+    display: table-row;
+  }
+
+  .Household-Transactions th,
+  .Household-Transactions td {
+    display: table-cell;
+  }
+
+  .mobile {
+    display: none;
+  }
 }
