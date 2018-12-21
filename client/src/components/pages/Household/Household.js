@@ -189,6 +189,12 @@ class Household extends Component {
             <span> Name: {member.name}, ID: {member.id}.</span>
           ))
         }
+        <h2>Balances:</h2>
+        {
+          this.state.members.map(memberSummary => (
+            <div>{memberSummary.name}: {memberSummary.balance > 0 ? "+" + memberSummary.balance: memberSummary.balance}</div>
+          ))
+        }
         <h2>Recommendations:</h2>
         {
           this.state.recomendations.map(rec => (
@@ -280,22 +286,6 @@ class Household extends Component {
             </tbody>
           </table>
         </div>
-        <h2>Balances:</h2>
-        {
-          this.state.members.map(memberSummary => (
-            <div>{memberSummary.name}: {memberSummary.balance > 0 ? "+" + memberSummary.balance: memberSummary.balance}</div>
-          ))
-        }
-
-        <div className="block-level-button">
-          <Link to={"/household/" + this.state.householdID + "/log-transaction"}>
-            <Button
-              label="Log a New Transaction"
-              className="submit_on_white"
-            />
-          </Link>
-        </div>
-
       </div>
       : <div>
           <h1>uh-oh...</h1>

@@ -2,6 +2,10 @@
   margin: 20px 0;
 }
 
+.Household-Transactions {
+  margin-bottom: 40px;
+}
+
 .Household-Transactions td.empty {
   display: none;
 }
