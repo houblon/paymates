@@ -1,3 +1,11 @@
+.home {
+  background-color: #000;
+}
+
+.home .Paymates-title a {
+  color: #4FC3F7;
+}
+
 .LandingPage {
   text-align: center;
   background-image: url(https://media.giphy.com/media/1r8SvvPrDqVyRYk8yK/giphy.gif);
@@ -5,7 +13,7 @@
   background-repeat: no-repeat;
   height: 100%;
   background-size: 120px;
-  background-color: black;
+  /* background-color: black; */
 }
 
 .LandingPage-header {
@@ -17,6 +25,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding: 10px;
 }
 
 .LandingPage a {
