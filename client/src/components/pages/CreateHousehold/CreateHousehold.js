@@ -126,10 +126,11 @@ class CreateHousehold extends Component {
         })
         .then(response => response.json())
         .then(data => {
-          console.log('Got this back', data);
-
+          console.log(data.results.insertedIds[0]);
+          const householdID = data.results.insertedIds[0]
+          const url = '/household/' + householdID
           // Redirect to blog
-          this.props.history.push('/');
+          this.props.history.push(url);
         });
     }
   }
