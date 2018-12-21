@@ -20,6 +20,10 @@ class CreateHousehold extends Component {
     defaultCurrency: 'USD',
   }
 
+  removeRootClasses = () => {
+    document.getElementById('root').classList.remove('snow', 'home');
+  }
+
   onChangeHouseholdName = (ev) => {
     this.setState({
       householdName: ev.target.value,
@@ -80,6 +84,7 @@ class CreateHousehold extends Component {
   }
   componentDidMount() {
     // console.log('componentDidMount');
+    this.removeRootClasses();
   }
 
   submit = () => {

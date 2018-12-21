@@ -4,6 +4,14 @@ import { Link } from 'react-router-dom'
 import './FindHousehold.css';
 import Button from '../../Button/Button';
 class FindHousehold extends Component {
+  removeRootClasses = () => {
+    document.getElementById('root').classList.remove('snow', 'home');
+  }
+
+  componentDidMount() {
+    this.removeRootClasses();
+  }
+
   render() {
     return (
       <div className="FindHousehold">
