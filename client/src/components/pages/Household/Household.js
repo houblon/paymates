@@ -102,20 +102,22 @@ class Household extends Component {
       .then(data => {
         //console.log(data)
         //console.log(Object.values(data[0])[1])
-        this.setState({
-          rawData: data,
-          householdID: data[0]._id,
-          householdName: data[0].name,
-          transactions: data[0].transactions,
-        }, () => {
+        if (data[0]) {
           this.setState({
-            members: this.calculateMemberBalance(data[0].members),
+            rawData: data,
+            householdID: data[0]._id,
+            householdName: data[0].name,
+            transactions: data[0].transactions,
           }, () => {
             this.setState({
-              recomendations: this.recomendations(this.state.members)
+              members: this.calculateMemberBalance(data[0].members),
+            }, () => {
+              this.setState({
+                recomendations: this.recomendations(this.state.members)
+              })
             })
           })
-        })
+        }
       });
   }
   sortBalances = (arr) => {
