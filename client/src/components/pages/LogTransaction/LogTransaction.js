@@ -208,6 +208,7 @@ class LogTransaction extends Component {
   }
   buildFormData = () => {
     let formData = {
+      id: this.state.newTransactionID,
       date: this.state.pickedDateUTS,
       payer_ID: this.state.payer_ID,
       action: this.state.action,
@@ -427,12 +428,17 @@ class LogTransaction extends Component {
       .then(response => response.json())
       .then(data => {
         //console.log(data);
+        const transactionIDs = data[0].transactions.map(t => t.id).sort((a, b) => {return a - b});
+        const newTransactionID = transactionIDs[transactionIDs.length-1] + 1;
+        console.log('transactionIDs', transactionIDs);
+        console.log('newTransactionID', newTransactionID);
         this.setState({
           rawData: data,
           householdID: data[0]._id,
           householdName: data[0].name,
           members: this.setProportions(data[0].members),
-          proportions: this.setDefaultProportions(data[0].members)
+          proportions: this.setDefaultProportions(data[0].members),
+          newTransactionID: newTransactionID,
         })
       })
   }
