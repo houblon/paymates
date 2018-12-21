@@ -225,16 +225,6 @@ class CreateHousehold extends Component {
             label="Add household"
             className="submit_on_white"
           />
-          <br />
-          <br />
-          <Button onClick={() => this.mongoHouseholdsTest('households', '5c146f11e5fada39ca922968')}
-            label="GET Test household"
-          />
-          <br />
-          <br />
-          <Button onClick={() => this.mongoHouseholdsTest('households', '5c14196288ab5128ca0a5564')}
-            label="GET Alice and Bob's House household"
-          />
       </div>
     );
   }
