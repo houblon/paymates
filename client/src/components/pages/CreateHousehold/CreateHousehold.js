@@ -18,6 +18,8 @@ class CreateHousehold extends Component {
       }
     ],
     defaultCurrency: 'USD',
+    householdFieldEmptyOnSubmit: false,
+    memberFieldEmptyOnSubmit: false,
   }
 
   removeRootClasses = () => {
@@ -101,6 +103,13 @@ class CreateHousehold extends Component {
       if (member.name === '') {
         allMemberNameFieldsHaveText = false;
         console.log('please enter member name');
+        this.setState({
+          memberFieldEmptyOnSubmit: true,
+        });
+      } else {
+        this.setState({
+          memberFieldEmptyOnSubmit: false,
+        });
       }
     }
 
@@ -108,6 +117,13 @@ class CreateHousehold extends Component {
     if (this.state.householdName === '') {
       householdNameFieldHasText = false;
       console.log('needs a household name');
+      this.setState({
+        householdFieldEmptyOnSubmit: true,
+      });
+    } else {
+      this.setState({
+        householdFieldEmptyOnSubmit: false,
+      });
     }
 
     // const newhouseholdMembers = this.state.householdMembers.map((member, state_index) => {
@@ -156,6 +172,14 @@ class CreateHousehold extends Component {
     return (
       <div className="Create-Household">
         <h1>Create a new household</h1>
+        {
+          this.state.householdFieldEmptyOnSubmit || this.state.memberFieldEmptyOnSubmit ? (
+            <ul className="errors">
+              {this.state.householdFieldEmptyOnSubmit ? <li>Please enter a household name</li> : null}
+              {this.state.memberFieldEmptyOnSubmit ? <li>Please enter all member names</li> : null}
+            </ul>
+          ) : null
+        }
         <Input
           className='household-input'
           name="Household Name"

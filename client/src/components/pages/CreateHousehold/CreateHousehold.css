@@ -17,3 +17,8 @@
 .member-add {
   margin-right: 10px;
 }
+
+.errors {
+  color: red;
+  padding-left: 17px;
+}
