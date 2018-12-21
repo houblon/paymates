@@ -195,11 +195,17 @@ class Household extends Component {
             <div>{memberSummary.name}: {memberSummary.balance > 0 ? "+" + memberSummary.balance: memberSummary.balance}</div>
           ))
         }
-        <h2>Recommendations:</h2>
         {
-          this.state.recomendations.map(rec => (
-            <p>{rec}</p>
-          ))
+          this.state.transactions.length > 0 ?
+            <div className="recommendations">
+              <h2>Recommendations:</h2>
+              {
+                this.state.recomendations.map(rec => (
+                  <p>{rec}</p>
+                ))
+              }
+            </div>
+          : null
         }
         <div className="block-level-button">
           <Link to={"/household/" + this.state.householdID + "/log-transaction"}>
@@ -209,83 +215,89 @@ class Household extends Component {
             />
           </Link>
         </div>
-        <h2>Transactions:</h2>
-        <div className="table-container">
-          <table className="Household-Transactions">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Action</th>
-                <th>Amount</th>
-                {/* <th>Currency</th> */}
-                <th>Payer</th>
-                <th>Payee</th>
-                <th>Recipient</th>
-                <th>Proportions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                this.state.transactions.map(transaction => (
+        {
+          this.state.transactions.length > 0 ?
+            <div className="transactions-container">
+              <h2>Transactions:</h2>
+              <div className="table-container">
+              <table className="Household-Transactions">
+                <thead>
                   <tr>
-                    <td className="transaction-id">
-                      <div><span className="mobile">Transaction ID:</span>{transaction.id}</div>
-                    </td>
-                    <td>
-                      <div><span className="mobile">Date:</span>
-                        {
-                          (new Date(transaction.date*1000).getUTCMonth() + 1) + '/' +
-                          new Date(transaction.date*1000).getUTCDate() + '/' +
-                          new Date(transaction.date*1000).getUTCFullYear()
-                        }
-                      </div>
-                    </td>
-                    <td>
-                      <div><span className="mobile">Action:</span>{transaction.action}</div>
-                    </td>
-                    <td>
-                      <div><span className="mobile">Amount:</span>{transaction.amount}</div>
-                    </td>
-                    {/* {
-                      transaction.currency ? 
-                        <td>
-                          <div className="mobile">Currency:</div>
-                          <div>{transaction.currency}</div>
-                        </td>
-                        : <td className="empty"></td>
-                    } */}
-                    <td>
-                      <div><span className="mobile">Payer:</span>{transaction.payer_ID}</div>
-                    </td>
-                    {
-                      transaction.payee ? <td>
-                                            <div><span className="mobile">Payee:</span>{transaction.payee}</div>
-                                          </td> 
-                                        : <td className="empty"></td>
-                    }
-                    {
-                      transaction.recipient_ID ?  <td>
-                                                    <div><span className="mobile">Recipient:</span>{transaction.recipient_ID}</div>
-                                                  </td>
-                                                  : <td className="empty"></td>
-                    }
-                    <td>
-                      <div className="mobile">Proportions:</div>
-                      <div className={transaction.proportions ? '' : 'empty'}>
-                      {
-                        transaction.proportions ? transaction.proportions.map(proportion => (
-                          <div>{proportion.member_ID} : {proportion.proportion}</div>
-                        )) : null
-                      }
-                      </div>
-                    </td>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                    <th>Amount</th>
+                    {/* <th>Currency</th> */}
+                    <th>Payer</th>
+                    <th>Payee</th>
+                    <th>Recipient</th>
+                    <th>Proportions</th>
                   </tr>
-                ))
-              }
-            </tbody>
-          </table>
-        </div>
+                </thead>
+                <tbody>
+                  {
+                    this.state.transactions.map(transaction => (
+                      <tr>
+                        <td className="transaction-id">
+                          <div><span className="mobile">Transaction ID:</span>{transaction.id}</div>
+                        </td>
+                        <td>
+                          <div><span className="mobile">Date:</span>
+                            {
+                              (new Date(transaction.date*1000).getUTCMonth() + 1) + '/' +
+                              new Date(transaction.date*1000).getUTCDate() + '/' +
+                              new Date(transaction.date*1000).getUTCFullYear()
+                            }
+                          </div>
+                        </td>
+                        <td>
+                          <div><span className="mobile">Action:</span>{transaction.action}</div>
+                        </td>
+                        <td>
+                          <div><span className="mobile">Amount:</span>{transaction.amount}</div>
+                        </td>
+                        {/* {
+                          transaction.currency ? 
+                            <td>
+                              <div className="mobile">Currency:</div>
+                              <div>{transaction.currency}</div>
+                            </td>
+                            : <td className="empty"></td>
+                        } */}
+                        <td>
+                          <div><span className="mobile">Payer:</span>{transaction.payer_ID}</div>
+                        </td>
+                        {
+                          transaction.payee ? <td>
+                                                <div><span className="mobile">Payee:</span>{transaction.payee}</div>
+                                              </td> 
+                                            : <td className="empty"></td>
+                        }
+                        {
+                          transaction.recipient_ID ?  <td>
+                                                        <div><span className="mobile">Recipient:</span>{transaction.recipient_ID}</div>
+                                                      </td>
+                                                      : <td className="empty"></td>
+                        }
+                        <td>
+                          <div className="mobile">Proportions:</div>
+                          <div className={transaction.proportions ? '' : 'empty'}>
+                          {
+                            transaction.proportions ? transaction.proportions.map(proportion => (
+                              <div>{proportion.member_ID} : {proportion.proportion}</div>
+                            )) : null
+                          }
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+            </div>
+            </div>
+          : null
+        }
       </div>
       : <div>
           <h1>uh-oh...</h1>
