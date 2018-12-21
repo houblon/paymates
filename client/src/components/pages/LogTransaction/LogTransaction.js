@@ -153,9 +153,10 @@ class LogTransaction extends Component {
             })
               .then(response => response.json())
               .then(data => {
-                console.log('Sent form data. Got this back', data);
-                // Redirect to homepage
-                // this.props.history.push('/');
+                console.log(data);
+                const householdID = this.state.householdID
+                const url = '/household/' + householdID
+                this.props.history.push(url);
               });
       } else {
         this.renderErrors() // Pickup where this.validate left off & use what got set in state.

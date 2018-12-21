@@ -82,7 +82,10 @@ app.put('/api/mongodb/:collectionName/:objectId/', (request, response) => {
       if (err) throw err;
       // console.log(results);
       console.log(results);
-
+      response.json({
+        'success': true,
+        'results': results,
+      });
         // If we modified exactly 1, then success, otherwise failure
         // if (results.result.nModified === 1) {
         //   response.json({
@@ -142,6 +145,10 @@ app.put('/api/:collectionName/:objectId/', (request, response) => {
       if (err) throw err;
       // console.log(results);
       console.log(results);
+      response.json({
+        'success': true,
+        'results': results,
+      });
 
         // If we modified exactly 1, then success, otherwise failure
         // if (results.result.nModified === 1) {
