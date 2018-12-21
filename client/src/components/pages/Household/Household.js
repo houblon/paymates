@@ -189,11 +189,17 @@ class Household extends Component {
             <span> Name: {member.name}, ID: {member.id}.</span>
           ))
         }
-        <h2>Balances:</h2>
         {
-          this.state.members.map(memberSummary => (
-            <div>{memberSummary.name}: {memberSummary.balance > 0 ? "+" + memberSummary.balance: memberSummary.balance}</div>
-          ))
+          this.state.transactions.length > 0 ?
+            <div className="balances">
+              <h2>Balances:</h2>
+              {
+                this.state.members.map(memberSummary => (
+                  <div>{memberSummary.name}: {memberSummary.balance > 0 ? "+" + memberSummary.balance: memberSummary.balance}</div>
+                ))
+              }
+            </div>
+          : null
         }
         {
           this.state.transactions.length > 0 ?
