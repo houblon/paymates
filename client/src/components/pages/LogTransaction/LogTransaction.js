@@ -153,9 +153,10 @@ class LogTransaction extends Component {
             })
               .then(response => response.json())
               .then(data => {
-                console.log('Sent form data. Got this back', data);
-                // Redirect to homepage
-                // this.props.history.push('/');
+                console.log(data);
+                const householdID = this.state.householdID
+                const url = '/household/' + householdID
+                this.props.history.push(url);
               });
       } else {
         this.renderErrors() // Pickup where this.validate left off & use what got set in state.
@@ -245,10 +246,11 @@ class LogTransaction extends Component {
   resetProportions = () => {
     const newSummary = this.setProportions(this.state.members)
     this.setState({
-      members: newSummary
+      members: newSummary,
+      valid_Proportions: true
     })
   }
-  componentDidMount () {
+  componentDidMount () {  
     // const currentURL = window.location.href
     // let result = currentURL.substring(currentURL.lastIndexOf("/") + 1);
     // console.log(result);
@@ -280,34 +282,9 @@ class LogTransaction extends Component {
             />
           </Link>
         </h3>
-        <div className='transaction-date'>
-          <DatePicker
-            placeholderText="Enter transaction date"
-            selected={this.state.pickedDate}
-            onChange={this.onPickDate}
-            className="react-datepicker__input"
-          />
-        </div>
+        
         <div className=''>
-          <h2>Who Paid: {this.state.payer_ID}</h2>
-          <SelectList
-            data={
-              this.state.members.map(member => (
-                {
-                  value: member.id,
-                  label: member.name
-                }
-              ))
-            }
-            name='payer'
-            onChange={this.onChangePayer}
-            textField='label'
-            value={this.state.payer_ID}
-            valueField='value'
-          />
-        </div>
-        <div className=''>
-        <h2>Action type: {this.state.action}</h2>
+        <h2>Which are you logging?</h2>
           <SelectList
             data={
               [
@@ -330,6 +307,36 @@ class LogTransaction extends Component {
             valueField='value'
           />
         </div>
+        <h2>When exactly?</h2>
+        <div className='transaction-date-container'>
+        <div className='transaction-date'>
+          <DatePicker
+            placeholderText="Enter transaction date"
+            selected={this.state.pickedDate}
+            onChange={this.onPickDate}
+            className="react-datepicker__input"
+          />
+        </div>
+        </div>
+        <div className=''>
+          <h2>Who paid...?</h2>
+          <SelectList
+            data={
+              this.state.members.map(member => (
+                {
+                  value: member.id,
+                  label: member.name
+                }
+              ))
+            }
+            name='payer'
+            onChange={this.onChangePayer}
+            textField='label'
+            value={this.state.payer_ID}
+            valueField='value'
+          />
+        </div>
+        
         <div className={this.state.reimbursementShowBool}>
           <h2>Reimbursement Recipient: {this.state.recipient_ID}</h2>
           {
@@ -356,14 +363,19 @@ class LogTransaction extends Component {
           }
         </div>
         <div className={this.state.billShowBool}>
-          <Input
-            name="Business name"
-            placeholder="Paid what bill..."
-            value={this.state.payee}
-            onChange={this.onChangePayee}
-          />
+        <h2>What did you pay for?</h2>
+          <div className="transaction-payee">
+            <Input
+              name="Business name"
+              placeholder="Paid what bill..."
+              value={this.state.payee}
+              onChange={this.onChangePayee}
+            />
+          </div>
         </div>
-        <div className=''>
+        <h2>How much?</h2>
+        <div className="transaction-amount">
+          <label>$</label>
           <Input
             name="Amount"
             placeholder="Amount"
@@ -372,33 +384,36 @@ class LogTransaction extends Component {
           />
         </div>
         <div className={this.state.billShowBool}>
+        <h2>How do you want to split the bill?</h2>
         {
           this.state.members.map(member => (
-            <div>
-              <label>{member.name}'s proportion of the bill: {member.id}</label>
-            <Input
-              name={member.name + "'s proportion"}
-              placeholder={member.name + "'s proportion"}
-              id={member.id} // Using the ID parameter for passing ID to function. Asking Michael / Maddy about best practices on this.
-              value={member.proportion} // How do I add a '%' sign after the value without breaking validation?
-              onChange={this.onChangeProportion}
-              type="number"
-              step=".1"
-              max="100"
-              min="0"
-            />
+            <div className='transaction-proportion'>
+              <label>{member.name}'s proportion:</label>
+              <Input
+                name={member.name + "'s proportion"}
+                placeholder={member.name + "'s proportion"}
+                id={member.id} // Using the ID parameter for passing ID to function. Asking Michael / Maddy about best practices on this.
+                value={member.proportion} // How do I add a '%' sign after the value without breaking validation?
+                onChange={this.onChangeProportion}
+                type="number"
+                step=".1"
+                max="100"
+                min="0"
+              />
             </div>
           ))
         }
         {
           this.state.valid_Proportions ? null :
           <div className="transaction-alert">
-            <p>The proportions do not add up to 100%. Please correct.</p>
-            <Button
-              className="submit_on_white"
-              onClick={this.resetProportions}
-              label="Reset Proportions"
-            />
+          <div className="transaction-proportion">
+              <p>...were you raised in a barn!<br />Proportions add up to 100<br />;)</p>
+              <Button
+                className="submit_on_white"
+                onClick={this.resetProportions}
+                label="Reset Proportions"
+              />
+            </div>
           </div>
         }
         </div>

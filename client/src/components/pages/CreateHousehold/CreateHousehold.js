@@ -91,12 +91,18 @@ class CreateHousehold extends Component {
       transactions: []
     };
 
-    let emptyMemberNameField = false;
-
+    let allMemberNameFieldsHaveText = true;
     for (const member of this.state.householdMembers) {
       if (member.name === '') {
-        emptyMemberNameField = true;
+        allMemberNameFieldsHaveText = false;
+        console.log('please enter member name');
       }
+    }
+
+    let householdNameFieldHasText = true;
+    if (this.state.householdName === '') {
+      householdNameFieldHasText = false;
+      console.log('needs a household name');
     }
 
     // const newhouseholdMembers = this.state.householdMembers.map((member, state_index) => {
@@ -105,20 +111,15 @@ class CreateHousehold extends Component {
     // });
     // this.setState({ householdMembers: newhouseholdMembers });
 
-    if (emptyMemberNameField) {
-      console.log('please enter member name');
-    }
-
-    if (this.state.householdName === '') {
-      console.log('needs a household name');
-    }
+    
 
     if (this.state.householdMembers.length < 2) {
       console.log('must have at least 2 household members');
     }
 
-    if (this.state.householdName !== '' &&
-        this.state.householdMembers.length > 1) {
+    if (householdNameFieldHasText &&
+        this.state.householdMembers.length > 1 &&
+        allMemberNameFieldsHaveText) {
       fetch('/api/households/', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
@@ -126,10 +127,11 @@ class CreateHousehold extends Component {
         })
         .then(response => response.json())
         .then(data => {
-          console.log('Got this back', data);
-
+          console.log(data.results.insertedIds[0]);
+          const householdID = data.results.insertedIds[0]
+          const url = '/household/' + householdID
           // Redirect to blog
-          this.props.history.push('/');
+          this.props.history.push(url);
         });
     }
   }
@@ -222,16 +224,6 @@ class CreateHousehold extends Component {
           <Button onClick={this.submit}
             label="Add household"
             className="submit_on_white"
-          />
-          <br />
-          <br />
-          <Button onClick={() => this.mongoHouseholdsTest('households', '5c146f11e5fada39ca922968')}
-            label="GET Test household"
-          />
-          <br />
-          <br />
-          <Button onClick={() => this.mongoHouseholdsTest('households', '5c14196288ab5128ca0a5564')}
-            label="GET Alice and Bob's House household"
           />
       </div>
     );
