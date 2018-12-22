@@ -146,14 +146,14 @@ class Household extends Component {
       const payer_ID = transaction.payer_ID
       const recipient_ID = transaction.recipient_ID
       for (const member of members) {
-        if (member.id === payer_ID) {
+        if (Number(member.id) === Number(payer_ID)) {
           // console.log("Payers: member.id === payer_ID" + " " + member.id + " is " + payer_ID);
           // console.log(member.name);
           // console.log(transaction);
           transaction.payerName = member.name
           newTransactionsArray.push(this.addProportionNames(transaction, members))
         }
-        if (member.id === recipient_ID) {
+        if (Number(member.id) === Number(recipient_ID)) {
           //console.log("Recipients: member.id === recipient_ID" + " " + member.id + " is " + recipient_ID);
           transaction.recipientName = member.name
           newTransactionsArray.push(transaction)
@@ -169,7 +169,9 @@ class Household extends Component {
     const proportions = transaction.proportions
     for (const proportion of proportions) {
       for (const member of members) {
-        if (member.id === proportion.member_ID) {
+        const memID = Number(member.id)
+        const propMemID = Number(proportion.member_ID)
+        if (memID === propMemID) {
           proportion.name = member.name
         }
       }
@@ -188,7 +190,7 @@ class Household extends Component {
             rawData: data,
             householdID: data[0]._id,
             householdName: data[0].name,
-            //transactions: data[0].transactions,
+            // transactions: data[0].transactions,
             transactions: this.addMemberNames(data[0]),
           }, () => {
             this.setState({
