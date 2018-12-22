@@ -36,6 +36,9 @@ class LandingPage extends Component {
               </Link>
             </p>
         </header>
+        <div class="cheer">
+          <img src="https://media.giphy.com/media/1r8SvvPrDqVyRYk8yK/giphy.gif" />
+        </div>
       </div>
     );
   }
