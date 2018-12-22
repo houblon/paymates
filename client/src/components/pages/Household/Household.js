@@ -10,30 +10,30 @@ class Household extends Component {
     transactions: [],
     fetchComplete: false,
   }
-  transformTransactions = (data) => {
-    const arr = []
-    for (const transaction of Object.values(data[0])[4]) {
-      let tempArr = []
-      let propArr = []
-      tempArr.push(
-        transaction.id,
-        transaction.date,
-        transaction.action,
-        transaction.amount,
-        transaction.payer_ID,
-        transaction.recipient_ID
-        )
-        if (transaction.proportions) {
-          for (const proportion of Object.entries(transaction.proportions)) {
-            propArr.push(proportion)
-          }
-          tempArr.push(propArr)
-        }
-      arr.push(tempArr)
-    }
-    //console.log(arr);
-    return arr
-  }
+  // transformTransactions = (data) => {
+  //   const arr = []
+  //   for (const transaction of Object.values(data[0])[4]) {
+  //     let tempArr = []
+  //     let propArr = []
+  //     tempArr.push(
+  //       transaction.id,
+  //       transaction.date,
+  //       transaction.action,
+  //       transaction.amount,
+  //       transaction.payer_ID,
+  //       transaction.recipient_ID
+  //       )
+  //       if (transaction.proportions) {
+  //         for (const proportion of Object.entries(transaction.proportions)) {
+  //           propArr.push(proportion)
+  //         }
+  //         tempArr.push(propArr)
+  //       }
+  //     arr.push(tempArr)
+  //   }
+  //   //console.log(arr);
+  //   return arr
+  // }
   sumAllBillsPaidByMember = (member) => {
     let total = 0
     for (const transaction of this.state.transactions) {
@@ -96,6 +96,46 @@ class Household extends Component {
     }
     return membersSummary
   }
+  addMemberNames = (data) => {
+    const members = data.members
+    const transactions = data.transactions
+    // console.log(members);
+    // console.log(transactions);
+    let newTransactionsArray = []
+    for (const transaction of transactions) {
+      const payer_ID = transaction.payer_ID
+      const recipient_ID = transaction.recipient_ID
+      for (const member of members) {
+        if (member.id === payer_ID) {
+          // console.log("Payers: member.id === payer_ID" + " " + member.id + " is " + payer_ID);
+          // console.log(member.name);
+          // console.log(transaction);
+          transaction.payerName = member.name
+          newTransactionsArray.push(this.addProportionNames(transaction, members))
+        }
+        if (member.id === recipient_ID) {
+          //console.log("Recipients: member.id === recipient_ID" + " " + member.id + " is " + recipient_ID);
+          transaction.recipientName = member.name
+          newTransactionsArray.push(transaction)
+        }
+      }
+    }
+    //console.log(newTransactionsArray);
+    return newTransactionsArray
+  }
+  addProportionNames = (transaction, members) => {
+    // console.log(members);
+    // console.log(transaction);
+    const proportions = transaction.proportions
+    for (const proportion of proportions) {
+      for (const member of members) {
+        if (member.id === proportion.member_ID) {
+          proportion.name = member.name
+        }
+      }
+    }
+    return transaction
+  }
   componentDidMount () {
     const id = this.props.match.params.id;
     fetch(`/api/households/${id}`)
@@ -108,7 +148,8 @@ class Household extends Component {
             rawData: data,
             householdID: data[0]._id,
             householdName: data[0].name,
-            transactions: data[0].transactions,
+            //transactions: data[0].transactions,
+            transactions: this.addMemberNames(data[0]),
           }, () => {
             this.setState({
               members: this.calculateMemberBalance(data[0].members),
@@ -116,6 +157,8 @@ class Household extends Component {
               this.setState({
                 recomendations: this.recomendations(this.state.members)
               })
+              console.log(this.state.transactionsZZZ);
+              
             })
           })
         }
@@ -131,7 +174,6 @@ class Household extends Component {
     return a[1] - b[1];
   })
   }
- 
   recomendations = (memberSummarys) => {
     let builtArr = []
     for (const summary of memberSummarys) {
@@ -154,8 +196,8 @@ class Household extends Component {
       //console.log(arr);
       count++
       if (Math.abs(arr[0][1]) <= arr[arr.length-1][1]) {
-        console.log('Less than');
-        console.log(arr);
+        //console.log('Less than');
+        //console.log(arr);
         recomendations.push(arr[0][2] + " should pay " + arr[arr.length-1][2] + " $" + Math.abs(arr[0][1]) + ".")
         arr[arr.length-1][1] = arr[arr.length-1][1]-Math.abs(arr[0][1])
         arr[0][1] = 0
@@ -284,7 +326,7 @@ class Household extends Component {
                                 : <td className="empty"></td>
                             } */}
                             <td>
-                              <div><span className="mobile">Payer:</span>{transaction.payer_ID}</div>
+                              <div><span className="mobile">Payer:</span>{transaction.payerName}</div>
                             </td>
                             {
                               transaction.payee ? <td>
@@ -294,7 +336,7 @@ class Household extends Component {
                             }
                             {
                               transaction.recipient_ID ?  <td>
-                                                            <div><span className="mobile">Recipient:</span>{transaction.recipient_ID}</div>
+                                                            <div><span className="mobile">Recipient:</span>{transaction.recipientName}</div>
                                                           </td>
                                                           : <td className="empty"></td>
                             }
@@ -303,7 +345,7 @@ class Household extends Component {
                               <div className={transaction.proportions ? '' : 'empty'}>
                               {
                                 transaction.proportions ? transaction.proportions.map(proportion => (
-                                  <div>{proportion.member_ID} : {proportion.proportion}</div>
+                                  <div>{proportion.name} : {proportion.proportion}</div>
                                 )) : null
                               }
                               </div>
