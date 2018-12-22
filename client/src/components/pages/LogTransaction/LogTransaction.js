@@ -428,8 +428,14 @@ class LogTransaction extends Component {
       .then(response => response.json())
       .then(data => {
         //console.log(data);
-        const transactionIDs = data[0].transactions.map(t => t.id).sort((a, b) => {return a - b});
-        const newTransactionID = transactionIDs[transactionIDs.length-1] + 1;
+        let newTransactionID;
+        if (data[0].transactions.length > 0) {
+          const transactionIDs = data[0].transactions.map(t => t.id).sort((a, b) => {return a - b});
+          newTransactionID = transactionIDs[transactionIDs.length-1] + 1;
+        } else {
+          newTransactionID = 1;
+        }
+        
         this.setState({
           rawData: data,
           householdID: data[0]._id,
