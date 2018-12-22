@@ -1,0 +1,17 @@
+.input-container {
+  display: flex;
+}
+
+.Input.household-input {
+  margin-right: 10px;
+  max-width: 500px;
+}
+
+.member-add {
+  margin-right: 10px;
+}
+
+.errors {
+  color: red;
+  padding-left: 17px;
+}

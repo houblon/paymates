@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectID;
 const app = express();
 app.use(express.json());
 
@@ -12,7 +13,6 @@ function logger(req, res, next) {
 }
 app.use(logger);
 /////////////////////////////////////////////
-
 
 
 //
@@ -41,11 +41,134 @@ app.get('/api/some/example/with/mongodb/', (request, response) => {
 });
 
 
+//
+// Custom GET route with params collectionName and objectId (with use of MongoDB)
+app.get('/api/:collectionName/:objectId/', (request, response) => {
+  const collectionName = request.params.collectionName;
+  const objectId = request.params.objectId;
+  // console.log('Object ID:', objectId);
+  // console.log('Custom collectionName + object ID route with MongoDB is being used...');
+
+  db.collection(collectionName)
+    .find({"_id": ObjectId(objectId)})
+    .toArray((err, results) => {
+      // Got data back.. send to client
+      if (err) throw err;
+      response.json(results);
+    });
+});
+
+
+// PUT endpoint for modifying an existing item
+app.put('/api/mongodb/:collectionName/:objectId/', (request, response) => {
+  const collectionName = request.params.collectionName;
+  const objectId = request.params.objectId;
+  const transactions = request.body;
+  // const query = request.query;
+  console.log('Object ID:', objectId);
+  console.log('Custom PUT collectionName + object ID route with MongoDB is being used...');
+
+  // db.collection(collectionName)
+  // .find({"_id": ObjectId(objectId)})
+  db.collection(collectionName).findOneAndUpdate(
+    // {_id: ObjectId(objectId)},
+    // {},
+    {_id: ObjectId(objectId)},
+    // {$push: data}, // probably want this or something like it
+    // {$push: {transactions: {"payer": "Steve","amount": 10}}},
+    // {$push: {transactions: {datum}}},
+    {$push: {transactions}},
+    (err, results) => {
+      if (err) throw err;
+      // console.log(results);
+      console.log(results);
+      response.json({
+        'success': true,
+        'results': results,
+      });
+        // If we modified exactly 1, then success, otherwise failure
+        // if (results.result.nModified === 1) {
+        //   response.json({
+        //     success: true,
+        //   });
+        // } else {
+        //   response.json({
+        //     success: false,
+        //   });
+        // }
+    }
+  );
+});
+
+
+
+//
+// Custom POST route with param collectionName (with use of MongoDB)
+app.post('/api/:collectionName/', (request, response) => {
+  const collectionName = request.params.collectionName;
+  const data = request.body;
+
+  db.collection(collectionName)
+    .insert(data, (err, results) => {
+      // Got data back.. send to client
+      if (err) throw err;
+
+      response.json({
+        'success': true,
+        'results': results,
+      });
+    });
+});
+
+
+//
+// Custom PUT route with params collectionName and objectId (with use of MongoDB)
+app.put('/api/:collectionName/:objectId/', (request, response) => {
+  const collectionName = request.params.collectionName;
+  const objectId = request.params.objectId;
+  const transactions = request.body;
+  // const query = request.query;
+  console.log('Object ID:', objectId);
+  console.log('Custom PUT collectionName + object ID route with MongoDB is being used...');
+
+  // db.collection(collectionName)
+  // .find({"_id": ObjectId(objectId)})
+  db.collection(collectionName).findOneAndUpdate(
+    // {_id: ObjectId(objectId)},
+    // {},
+    {_id: ObjectId(objectId)},
+    // {$push: data}, // probably want this or something like it
+    // {$push: {transactions: {"payer": "Steve","amount": 10}}},
+    // {$push: {transactions: {datum}}},
+    {$push: {transactions}},
+    (err, results) => {
+      if (err) throw err;
+      // console.log(results);
+      console.log(results);
+      response.json({
+        'success': true,
+        'results': results,
+      });
+
+        // If we modified exactly 1, then success, otherwise failure
+        // if (results.result.nModified === 1) {
+        //   response.json({
+        //     success: true,
+        //   });
+        // } else {
+        //   response.json({
+        //     success: false,
+        //   });
+        // }
+    }
+  );
+});
+
 
 //
 // Totally insecure backend routes, good for rapid prototyping
 // DELETE before use in a real application
-app.get('/api/mongodb/:collectionName/', (request, response) => {
+app.get('/api/example/:collectionName/', (request, response) => {
   const collectionName = request.params.collectionName;
 
   // Get GET params
@@ -59,7 +182,8 @@ app.get('/api/mongodb/:collectionName/', (request, response) => {
     });
 });
 
-app.post('/api/mongodb/:collectionName/', (request, response) => {
+
+app.post('/api/example/:collectionName/', (request, response) => {
   const collectionName = request.params.collectionName;
   const data = request.body;
 
@@ -77,7 +201,7 @@ app.post('/api/mongodb/:collectionName/', (request, response) => {
 
 
 // PUT endpoint for modifying an existing item
-app.put('/api/mongodb/:collectionName/', (request, response) => {
+app.put('/api/example/:collectionName/', (request, response) => {
   const collectionName = request.params.collectionName;
   const data = request.body;
   const query = request.query;
@@ -101,7 +225,7 @@ app.put('/api/mongodb/:collectionName/', (request, response) => {
 
 
 // D in CRUD, delete a single item with given criteria
-app.delete('/api/mongodb/:collectionName/', (request, response) => {
+app.delete('/api/example/:collectionName/', (request, response) => {
   const collectionName = request.params.collectionName;
   const data = request.body;
   const query = request.query;
@@ -122,16 +246,6 @@ app.delete('/api/mongodb/:collectionName/', (request, response) => {
       }
     })
 });
-
-
-
-
-
-app.post('/api/mongodb/:collectionName/', (request, response) => {
-  const collection = request.params.collectionName;
-});
-
-
 
 
 /////////////////////////////////////////////
@@ -171,7 +285,7 @@ MongoClient.connect(MONGODB_URL, {useNewUrlParser: true}, (err, client) => {
       *********************************************
       * Insecure prototyping backend is running!  *
       * Only use for prototyping                  *
-      * Backend server up at ${PORT}              *
+      * Backend server up at ${PORT}                 *
       *********************************************
     `);
   })

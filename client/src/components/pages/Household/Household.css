@@ -1,0 +1,118 @@
+.block-level-button {
+  margin: 20px 0;
+}
+
+.url_copied_success_message {
+  display: inline;
+  margin-left: 10px;
+}
+
+.hide {
+  display: none;
+}
+
+.Household-Transactions {
+  margin-bottom: 40px;
+}
+
+.Household-Transactions td.empty {
+  display: none;
+}
+
+.Household-Transactions,
+.Household-Transactions thead,
+.Household-Transactions tbody,
+.Household-Transactions tr,
+.Household-Transactions th,
+.Household-Transactions td {
+  display: block;
+}
+
+.Household-Transactions {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.Household-Transactions thead {
+  display: none;
+}
+
+.Household-Transactions th,
+.Household-Transactions td {
+  padding: 5px;
+  border: 1px solid #aaa;
+  display: block;
+}
+
+.Household-Transactions td {
+  border-bottom-width: 0;
+  border-top-width: 0;
+}
+
+.Household-Transactions td:last-child {
+  border-bottom-width: 1px;
+}
+
+.Household-Transactions tr:nth-child(even) {
+  background: #eee;
+}
+
+.Household-Transactions tr:nth-child(odd) {
+  background: #FFF;
+}
+
+.Household-Transactions td.transaction-id {
+  background: #fff;
+  border-bottom-width: 1px;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-top-width: 0;
+  font-weight: 700;
+  margin-top: 20px;
+}
+
+.mobile {
+  margin-right: 5px;
+}
+
+
+@media only screen and (min-width: 600px) {
+  .Household-Transactions {
+    display: table;
+  }
+
+  .Household-Transactions thead {
+    display: table-header-group;
+    font-weight: 700;
+  }
+
+  .Household-Transactions tbody {
+    display: table-row-group;
+  }
+
+  .Household-Transactions tr {
+    display: table-row;
+  }
+
+  .Household-Transactions th,
+  .Household-Transactions td,
+  .Household-Transactions td.empty {
+    display: table-cell;
+  }
+
+  .Household-Transactions td {
+    border-width: 1px;
+  }
+
+  .Household-Transactions td.transaction-id {
+    background: none;
+    border: 1px solid #aaa;
+    font-weight: 400;
+    margin-top: 20px;
+    margin-top: 0;
+  }
+
+  .mobile {
+    display: none;
+  }
+}

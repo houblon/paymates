@@ -32,3 +32,12 @@ docs/build
 *.egg*
 *.log
 
+client/public/db.json
+client/src/components/pages/Household/Household-backup.js
+client/src/components/pages/Household/Household-hell.js
+client/src/components/pages/Household/Household-works.js
+scratch/db_object_example.js
+scratch/house1.json
+scratch/house2.json
+scratch/house_3.json
+client/src/components/pages/Household/Household-backup2.js

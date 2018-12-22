@@ -1,0 +1,132 @@
+/* React Widget SelectList component class */
+/* .rw-select-list {
+  padding: 0;
+} */
+
+.hide {
+  display: none;
+}
+
+/* React Widget list */
+.rw-list {
+  padding: 0;
+}
+
+/* React Widget list item */
+.rw-list-option {
+  list-style-type: none;
+}
+
+/* React Widget radio button */
+.rw-select-list-input {
+  margin-right: 8px;
+}
+
+/* ReactJS Datepicker */
+.transaction-date .react-datepicker__input-container {
+  width: 100%;
+}
+
+.transaction-date-container {
+  display: grid;
+  grid-template-columns: 2em 1fr;
+}
+
+.transaction-date-container .transaction-date {
+  grid-column: 2;
+}
+
+.rw-select-list ul {
+  display: grid;
+  grid-template-columns: 2em 1fr;
+  margin: 0;
+}
+
+.rw-list-option {
+  grid-column: 2;
+}
+
+.rw-select-list-label {
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.react-datepicker__input {
+  border: 2px solid #ccc;
+  border-radius: 7px;
+  color: #000;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+  padding: 0 5px;
+  width: 100%;
+}
+
+.react-datepicker__input::placeholder {
+  color: #AAA;
+}
+
+.react-datepicker__input.error {
+  border-color: #ff0000;  
+}
+
+.transaction-payee {
+  display: grid;
+  grid-template-columns: 2em 1fr}
+
+.transaction-payee input {
+  grid-column: 2;
+}
+
+.transaction-amount {
+  display: grid;
+  grid-template-columns: 2em 2em 1fr;
+  margin: 0 0 1em 0;
+}
+
+.transaction-amount label {
+  grid-column: 2;
+  font-weight: bold;
+  font-size: 2.5em;
+}
+.transaction-amount input {
+  grid-column: 3;
+  margin: 0;
+  max-width: 10em;
+}
+
+.transaction-proportion {
+  display: grid;
+  grid-template-columns: 2em 1fr 1fr;
+  grid-gap: .5em;
+}
+
+.transaction-proportion label {
+  grid-column: 2;
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-right: 1em;
+  margin: 0.1em 1em .1em 0;
+}
+
+.transaction-proportion input {
+  max-width: 4em;
+  margin: 0.1em 0;
+  padding: 0;
+}
+
+.transaction-proportion p {
+  grid-column: 2;
+  font-weight: bold;
+  font-size: 1em;
+  margin: 1em 0;
+}
+
+.transaction-proportion button {
+  max-width: 9em;
+  margin: 1em 0;
+  padding: 0;
+}
+
+.transaction-error-alert {color:red;}
+.hide {display: none;}
