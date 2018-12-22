@@ -11,44 +11,44 @@ class Household extends Component {
     fetchComplete: false,
   }
 
-  flashCopySuccessMessage = () => {
-    document.getElementById('url_copied_success_message').classList.remove('hide');
-    setTimeout(() => {
-      document.getElementById('url_copied_success_message').classList.add('hide');
-    }, 1000);
-  }
+  // flashCopySuccessMessage = () => {
+  //   document.getElementById('url_copied_success_message').classList.remove('hide');
+  //   setTimeout(() => {
+  //     document.getElementById('url_copied_success_message').classList.add('hide');
+  //   }, 1000);
+  // }
 
-  copyURLtoClpboard = () => {
-    const url = this.getURL();
-    this.copyToClipboard(url);
-    this.flashCopySuccessMessage();
-  }
+  // copyURLtoClpboard = () => {
+  //   const url = this.getURL();
+  //   this.copyToClipboard(url);
+  //   this.flashCopySuccessMessage();
+  // }
 
-  getURL = () => {
-    const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
-    // console.log('url', url);
-    return url;
-  }
+  // getURL = () => {
+  //   const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+  //   // console.log('url', url);
+  //   return url;
+  // }
 
-  copyToClipboard = (str) => {
-    const el = document.createElement('textarea');  // Create a <textarea> element
-    el.value = str;                                 // Set its value to the string that you want copied
-    el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
-    el.style.position = 'absolute';                 
-    el.style.left = '-9999px';                      // Move outside the screen to make it invisible
-    document.body.appendChild(el);                  // Append the <textarea> element to the HTML document
-    const selected =            
-      document.getSelection().rangeCount > 0        // Check if there is any content selected previously
-        ? document.getSelection().getRangeAt(0)     // Store selection if found
-        : false;                                    // Mark as false to know no selection existed before
-    el.select();                                    // Select the <textarea> content
-    document.execCommand('copy');                   // Copy - only works as a result of a user action (e.g. click events)
-    document.body.removeChild(el);                  // Remove the <textarea> element
-    if (selected) {                                 // If a selection existed before copying
-      document.getSelection().removeAllRanges();    // Unselect everything on the HTML document
-      document.getSelection().addRange(selected);   // Restore the original selection
-    }
-  };
+  // copyToClipboard = (str) => {
+  //   const el = document.createElement('textarea');  // Create a <textarea> element
+  //   el.value = str;                                 // Set its value to the string that you want copied
+  //   el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
+  //   el.style.position = 'absolute';                 
+  //   el.style.left = '-9999px';                      // Move outside the screen to make it invisible
+  //   document.body.appendChild(el);                  // Append the <textarea> element to the HTML document
+  //   const selected =            
+  //     document.getSelection().rangeCount > 0        // Check if there is any content selected previously
+  //       ? document.getSelection().getRangeAt(0)     // Store selection if found
+  //       : false;                                    // Mark as false to know no selection existed before
+  //   el.select();                                    // Select the <textarea> content
+  //   document.execCommand('copy');                   // Copy - only works as a result of a user action (e.g. click events)
+  //   document.body.removeChild(el);                  // Remove the <textarea> element
+  //   if (selected) {                                 // If a selection existed before copying
+  //     document.getSelection().removeAllRanges();    // Unselect everything on the HTML document
+  //     document.getSelection().addRange(selected);   // Restore the original selection
+  //   }
+  // };
 
   transformTransactions = (data) => {
     const arr = []
@@ -146,11 +146,12 @@ class Household extends Component {
       const payer_ID = transaction.payer_ID
       const recipient_ID = transaction.recipient_ID
       for (const member of members) {
-        if (Number(member.id) === Number(payer_ID)) {
+        if (Number(member.id) === Number(payer_ID) && transaction.proportions) {
           // console.log("Payers: member.id === payer_ID" + " " + member.id + " is " + payer_ID);
           // console.log(member.name);
           // console.log(transaction);
           transaction.payerName = member.name
+          // debugger;
           newTransactionsArray.push(this.addProportionNames(transaction, members))
         }
         if (Number(member.id) === Number(recipient_ID)) {
@@ -164,6 +165,7 @@ class Household extends Component {
     return newTransactionsArray
   }
   addProportionNames = (transaction, members) => {
+    // debugger;
     // console.log(members);
     // console.log(transaction);
     const proportions = transaction.proportions
@@ -182,11 +184,16 @@ class Household extends Component {
     const id = this.props.match.params.id;
     fetch(`/api/households/${id}`)
       .then(response => response.json())
+      // .then(() => {debugger;})
       .then(data => {
+        // debugger;
         //console.log(data)
         //console.log(Object.values(data[0])[1])
         if (data[0]) {
+          console.log('data[0]',data[0]);
+          // debugger;
           this.setState({
+            fetchComplete: true,
             rawData: data,
             householdID: data[0]._id,
             householdName: data[0].name,
@@ -280,14 +287,14 @@ class Household extends Component {
           <div className="Household-Report">
             <h1>Household Report for {this.state.householdName}</h1>
             <h2>Household ID: {this.state.householdID}</h2>
-            <div className="block-level-button">
+            {/* <div className="block-level-button">
               <Button
                 label='Copy Household Link'
                 className="submit_on_white"
                 onClick={this.copyURLtoClpboard}
               />
               <span id="url_copied_success_message" className="url_copied_success_message hide">Copied!</span>
-            </div>
+            </div> */}
             <h2>Members:</h2>
             {
               this.state.members.map(member => (
