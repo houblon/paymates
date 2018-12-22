@@ -10,6 +10,46 @@ class Household extends Component {
     transactions: [],
     fetchComplete: false,
   }
+
+  flashCopySuccessMessage = () => {
+    document.getElementById('url_copied_success_message').classList.remove('hide');
+    setTimeout(() => {
+      document.getElementById('url_copied_success_message').classList.add('hide');
+    }, 1000);
+  }
+
+  copyURLtoClpboard = () => {
+    const url = this.getURL();
+    this.copyToClipboard(url);
+    this.flashCopySuccessMessage();
+  }
+
+  getURL = () => {
+    const url = window.location.protocol + "//" + window.location.host + window.location.pathname;
+    // console.log('url', url);
+    return url;
+  }
+
+  copyToClipboard = (str) => {
+    const el = document.createElement('textarea');  // Create a <textarea> element
+    el.value = str;                                 // Set its value to the string that you want copied
+    el.setAttribute('readonly', '');                // Make it readonly to be tamper-proof
+    el.style.position = 'absolute';                 
+    el.style.left = '-9999px';                      // Move outside the screen to make it invisible
+    document.body.appendChild(el);                  // Append the <textarea> element to the HTML document
+    const selected =            
+      document.getSelection().rangeCount > 0        // Check if there is any content selected previously
+        ? document.getSelection().getRangeAt(0)     // Store selection if found
+        : false;                                    // Mark as false to know no selection existed before
+    el.select();                                    // Select the <textarea> content
+    document.execCommand('copy');                   // Copy - only works as a result of a user action (e.g. click events)
+    document.body.removeChild(el);                  // Remove the <textarea> element
+    if (selected) {                                 // If a selection existed before copying
+      document.getSelection().removeAllRanges();    // Unselect everything on the HTML document
+      document.getSelection().addRange(selected);   // Restore the original selection
+    }
+  };
+
   transformTransactions = (data) => {
     const arr = []
     for (const transaction of Object.values(data[0])[4]) {
@@ -196,6 +236,14 @@ class Household extends Component {
           <div className="Household-Report">
             <h1>Household Report for {this.state.householdName}</h1>
             <h2>Household ID: {this.state.householdID}</h2>
+            <div className="block-level-button">
+              <Button
+                label='Copy Household Link'
+                className="submit_on_white"
+                onClick={this.copyURLtoClpboard}
+              />
+              <span id="url_copied_success_message" className="url_copied_success_message hide">Copied!</span>
+            </div>
             <h2>Members:</h2>
             {
               this.state.members.map(member => (
@@ -229,7 +277,7 @@ class Household extends Component {
             <div className="block-level-button">
               <Link to={"/household/" + this.state.householdID + "/log-transaction"}>
                 <Button
-                  label="Log a New Transaction"
+                  label={this.state.transactions.length > 0 ? "Log a New Transaction" : "Log a New Transaction to Get Started"}
                   className="submit_on_white"
                 />
               </Link>
@@ -319,26 +367,26 @@ class Household extends Component {
             }
           </div>
         : <div>
-          <h1>uh-oh...</h1>
-          <h2>The household with id "{this.props.match.params.id}" was not found.</h2>
-          <p>Are you sure you have the correct url?</p>
-          <div className="block-level-button">
-            <Link to="/find-household/">
-              <Button
-                label="Find your Household"
-                className="submit_on_white"
-              />
-            </Link>
+            <h1>uh-oh...</h1>
+            <h2>The household with id "{this.props.match.params.id}" was not found.</h2>
+            <p>Are you sure you have the correct url?</p>
+            <div className="block-level-button">
+              <Link to="/find-household/">
+                <Button
+                  label="Find your Household"
+                  className="submit_on_white"
+                />
+              </Link>
+            </div>
+            <div className="block-level-button">
+              <Link to="/create-household/">
+                <Button
+                  label="Create a Household"
+                  className="submit_on_white"
+                />
+              </Link>
+            </div>
           </div>
-          <div className="block-level-button">
-            <Link to="/create-household/">
-              <Button
-                label="Create a Household"
-                className="submit_on_white"
-              />
-            </Link>
-          </div>
-        </div>
       )
     );
   }

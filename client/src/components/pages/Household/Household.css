@@ -2,6 +2,15 @@
   margin: 20px 0;
 }
 
+.url_copied_success_message {
+  display: inline;
+  margin-left: 10px;
+}
+
+.hide {
+  display: none;
+}
+
 .Household-Transactions {
   margin-bottom: 40px;
 }
