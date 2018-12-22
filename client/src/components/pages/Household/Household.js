@@ -241,7 +241,7 @@ class Household extends Component {
             <h2>Members:</h2>
             {
               this.state.members.map(member => (
-                <span> Name: {member.name}, ID: {member.id}.</span>
+                <p>{member.name}</p>
               ))
             }
             {
@@ -250,7 +250,7 @@ class Household extends Component {
                   <h2>Balances:</h2>
                   {
                     this.state.members.map(memberSummary => (
-                      <div>{memberSummary.name}: {memberSummary.balance > 0 ? "+" + memberSummary.balance: memberSummary.balance}</div>
+                      <p>{memberSummary.name}: {memberSummary.balance > 0 ? "+$" + memberSummary.balance: memberSummary.balance}</p>
                     ))
                   }
                 </div>
@@ -259,7 +259,7 @@ class Household extends Component {
             {
               this.state.transactions.length > 0 ?
                 <div className="recommendations">
-                  <h2>Recommendations:</h2>
+                  <h2>In order to settle up:</h2>
                   {
                     this.state.recomendations.map(rec => (
                       <p>{rec}</p>
@@ -279,7 +279,7 @@ class Household extends Component {
             {
               this.state.transactions.length > 0 ?
                 <div className="transactions-container">
-                  <h2>Transactions:</h2>
+                  <h2>Transaction history:</h2>
                   <div className="table-container">
                   <table className="Household-Transactions">
                     <thead>
@@ -315,7 +315,7 @@ class Household extends Component {
                               <div><span className="mobile">Action:</span>{transaction.action}</div>
                             </td>
                             <td>
-                              <div><span className="mobile">Amount:</span>{transaction.amount}</div>
+                              <div><span className="mobile">Amount:</span>${transaction.amount}</div>
                             </td>
                             {/* {
                               transaction.currency ? 
@@ -345,7 +345,7 @@ class Household extends Component {
                               <div className={transaction.proportions ? '' : 'empty'}>
                               {
                                 transaction.proportions ? transaction.proportions.map(proportion => (
-                                  <div>{proportion.name} : {proportion.proportion}</div>
+                                  <div>{proportion.name} : {proportion.proportion}%</div>
                                 )) : null
                               }
                               </div>
