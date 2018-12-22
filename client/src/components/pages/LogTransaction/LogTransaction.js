@@ -158,7 +158,7 @@ class LogTransaction extends Component {
           errors: ["Please tell us who is being reimbursed."]
         }
       })
-    } else if (this.state.recipient_ID != "" && this.state.action === "reimbursement") {
+    } else if (this.state.recipient_ID !== "" && this.state.action === "reimbursement") {
       console.log('hi');
       
       this.setState({
